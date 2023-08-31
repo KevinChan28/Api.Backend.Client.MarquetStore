@@ -26,6 +26,7 @@ namespace Api.Client.MarquetStore
 
             app.UseAuthorization();
 
+            app.UseAuthentication();
 
             app.MapControllers();
 
