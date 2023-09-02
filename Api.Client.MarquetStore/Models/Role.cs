@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Api.Client.MarquetStore.Models;
 
-public partial class Personalization
+public partial class Role
 {
     public int Id { get; set; }
 
-    public int ConceptId { get; set; }
+    public string Name { get; set; } = null!;
 
-    public int? IngredientId { get; set; }
+    public string Description { get; set; } = null!;
 }

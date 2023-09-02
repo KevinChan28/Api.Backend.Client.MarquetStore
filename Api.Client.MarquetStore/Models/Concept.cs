@@ -1,16 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Api.Client.MarquetStore.Models
+namespace Api.Client.MarquetStore.Models;
+
+public partial class Concept
 {
-    [Table("Concept")]
-    public class Concept
-    {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public int SaleId { get; set; }
-        public int ProductId { get; set; }
-        public int Quantity { get; set; }
-        public decimal Import { get; set; }
-    }
+    public int Id { get; set; }
+
+    public int SaleId { get; set; }
+
+    public int ProductId { get; set; }
+
+    public decimal Import { get; set; }
+
+    public int Quantity { get; set; }
 }

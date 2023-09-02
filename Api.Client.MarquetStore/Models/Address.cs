@@ -1,18 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Api.Client.MarquetStore.Models
+namespace Api.Client.MarquetStore.Models;
+
+public partial class Address
 {
-    [Table("Address")]
-    public class Address
-    {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public string ZipCode { get; set; }
-        public string Street { get; set; }
-        public string Neighborhood { get; set; }
-        public string InteriorNumber { get; set; }
-        public string OutdoorNumber { get; set; }
-        public int UserId { get; set; }
-    }
+    public int Id { get; set; }
+
+    public string ZipCode { get; set; } = null!;
+
+    public string Street { get; set; } = null!;
+
+    public string Neighborhood { get; set; } = null!;
+
+    public string InteriorNumber { get; set; } = null!;
+
+    public string OutdoorNumber { get; set; } = null!;
+
+    public int UserId { get; set; }
 }

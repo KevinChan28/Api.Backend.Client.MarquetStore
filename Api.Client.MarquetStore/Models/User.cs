@@ -1,18 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Api.Client.MarquetStore.Models
+namespace Api.Client.MarquetStore.Models;
+
+public partial class User
 {
-    [Table("User")]
-    public class User
-    {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public int RolId { get; set; }
-        public string Name { get; set;}
-        public string LastName { get; set;}
-        public string Telephone { get; set;}
-    }
+    public int Id { get; set; }
+
+    public string Email { get; set; } = null!;
+
+    public string Password { get; set; } = null!;
+
+    public int RolId { get; set; }
+
+    public string Name { get; set; } = null!;
+
+    public string LastName { get; set; } = null!;
+
+    public string? Telephone { get; set; }
 }
