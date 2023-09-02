@@ -1,13 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Api.Client.MarquetStore.Models
+namespace Api.Client.MarquetStore.Models;
+
+public partial class PaymentsMethod
 {
-    [Table("PaymentsMethod")]
-    public class PaymentsMethod
-    {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public string Description { get; set; }
-    }
+    public int Id { get; set; }
+
+    public string Description { get; set; } = null!;
 }

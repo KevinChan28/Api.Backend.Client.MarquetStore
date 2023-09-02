@@ -1,16 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Api.Client.MarquetStore.Models
+namespace Api.Client.MarquetStore.Models;
+
+public partial class Sale
 {
-    [Table("Sale")]
-    public class Sale
-    {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public decimal Total { get; set; }
-        public bool IsDelivered { get; set; }
-        public int UserId { get; set; }
-    }
+    public int Id { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public decimal Total { get; set; }
+
+    public int UserId { get; set; }
+
+    public ulong? IsDelivered { get; set; }
 }
