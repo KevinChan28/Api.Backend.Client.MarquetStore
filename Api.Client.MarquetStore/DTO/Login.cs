@@ -5,7 +5,7 @@ namespace Api.Client.MarquetStore.DTO
 {
     public class Login
     {
-        [Required]
+        [Required, EmailAddress]
         public string Email { get; set; }
         [Required,PasswordPropertyText]
         public string Password { get; set; }

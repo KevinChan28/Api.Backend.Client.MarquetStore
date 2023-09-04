@@ -13,7 +13,7 @@ public partial class Ingredient
 
     public decimal Price { get; set; }
 
-    public ulong? IsAvailable { get; set; }
+    public bool? IsAvailable { get; set; }
 
     public string? PathImage { get; set; }
 }

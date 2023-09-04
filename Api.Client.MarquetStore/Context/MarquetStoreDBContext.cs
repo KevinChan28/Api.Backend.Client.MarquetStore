@@ -36,9 +36,6 @@ public partial class MarquetstoreDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-    /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseMySQL("server=34.132.4.64;uid=kevin;pwd=12345;database=marquetstoreDB");*/
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Address>(entity =>
@@ -136,7 +133,7 @@ public partial class MarquetstoreDbContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(300);
             entity.Property(e => e.IsAvailable).HasColumnType("bit(1)");
             entity.Property(e => e.Name).HasMaxLength(300);
-            entity.Property(e => e.Pathlmage).HasMaxLength(600);
+            entity.Property(e => e.PathImage).HasMaxLength(600);
             entity.Property(e => e.Price).HasPrecision(10);
             entity.Property(e => e.Stock).HasColumnType("int(11)");
         });
