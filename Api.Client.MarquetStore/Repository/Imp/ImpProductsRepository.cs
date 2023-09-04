@@ -20,6 +20,14 @@ namespace Api.Client.MarquetStore.Repository.Imp
             return await _dbContext.Products.FirstOrDefaultAsync(a => a.Id == idProduct);
         }
 
+        public async Task<int> RegisterProduct(Product product)
+        {
+            EntityEntry<Product> productNew = await _dbContext.Products.AddAsync(product);
+            await _dbContext.SaveChangesAsync();
+
+            return productNew.Entity.Id;
+        }
+
         public async Task<int> Update(Product product)
         {
             EntityEntry<Product> update = _dbContext.Products.Update(product);

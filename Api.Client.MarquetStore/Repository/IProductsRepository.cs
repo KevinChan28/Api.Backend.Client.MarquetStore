@@ -6,5 +6,6 @@ namespace Api.Client.MarquetStore.Repository
     {
         Task<Product> GetProductById(int idProduct);
         Task<int> Update(Product product);
+        Task<int> RegisterProduct(Product product);
     }
 }
