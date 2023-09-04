@@ -20,13 +20,11 @@ namespace Api.Client.MarquetStore.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        IUserService _userService;
-        private readonly ILogger<UsersController> _logger;
+       private readonly IUserService _userService;
 
-        public UsersController(IUserService userService, ILogger<UsersController> logger)
+        public UsersController(IUserService userService)
         {
             _userService = userService;
-            _logger = logger;
         }
 
 
@@ -67,7 +65,7 @@ namespace Api.Client.MarquetStore.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     response.Message = ex.Message); ;
             }
-            _logger.LogInformation("Esta es una información de registro.");
+
             return Ok(response);
         }
 

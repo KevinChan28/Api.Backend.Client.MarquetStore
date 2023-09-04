@@ -13,9 +13,9 @@ public partial class Product
 
     public decimal Price { get; set; }
 
-    public ulong? IsAvailable { get; set; }
+    public bool? IsAvailable { get; set; }
 
     public int Stock { get; set; }
 
-    public string Pathlmage { get; set; } = null!;
+    public string PathImage { get; set; } = null!;
 }
