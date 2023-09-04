@@ -13,5 +13,5 @@ public partial class Sale
 
     public int UserId { get; set; }
 
-    public ulong? IsDelivered { get; set; }
+    public bool? IsDelivered { get; set; }
 }
