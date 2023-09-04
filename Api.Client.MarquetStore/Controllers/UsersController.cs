@@ -65,7 +65,6 @@ namespace Api.Client.MarquetStore.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     response.Message = ex.Message); ;
             }
-
             return Ok(response);
         }
 
