@@ -13,6 +13,19 @@ namespace Api.Client.MarquetStore.Service.Imp
             _productsRepository = productsRepository;
         }
 
+        public async Task<List<InformationProducts>> GetProducts()
+        {
+            List<Product>getProducts = await _productsRepository.GetProducts();
+            List<InformationProducts> products = getProducts.Select(a => new InformationProducts
+            {
+               Name = a.Name,
+               Description = a.Description,
+               Id = a.Id,
+               Price = a.Price,
+            }).ToList();
+
+            return products;
+        }
 
         public async Task<int> RegisterProduct(ProductRegister model)
         {

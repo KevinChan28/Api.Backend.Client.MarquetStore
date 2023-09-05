@@ -1,4 +1,5 @@
 ﻿using Api.Client.MarquetStore.DTO;
+using Api.Client.MarquetStore.Models;
 using Api.Client.MarquetStore.Models.Others;
 using Api.Client.MarquetStore.Service;
 using Microsoft.AspNetCore.Cors;
@@ -59,6 +60,42 @@ namespace Api.Client.MarquetStore.Controllers
             }
 
             return Ok(response);
+        }
+
+        /// <summary>
+        /// Obtener todos los productos
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>Catalogo de productos</returns>
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
+        public async Task<IActionResult> GetAllProducts()
+        {
+            ResponseBase answer = new ResponseBase();
+            try
+            {
+                List<InformationProducts> products = await _productsService.GetProducts();
+
+                if (products != null)
+                {
+                    answer.Success = true;
+                    answer.Message = "Search succes";
+                    answer.Data = products;
+                }
+                else
+                {
+                    answer.Success = false;
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+            return Ok(answer);
         }
     }
 }
