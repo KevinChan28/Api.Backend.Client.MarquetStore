@@ -13,6 +13,10 @@ namespace Api.Client.MarquetStore.Repository.Imp
             _dbContext = dbContext;
         }
 
+        public async Task<List<Concept>> GetAllConcepts()
+        {
+            return _dbContext.Concepts.AsEnumerable<Concept>().ToList();
+        }
 
         public async Task<int> Register(Concept concept)
         {

@@ -14,6 +14,10 @@ namespace Api.Client.MarquetStore.Repository.Imp
             _dbContext = dbContext;
         }
 
+        public async Task<List<Sale>> GetSalesOfCustomer(int idCustomer)
+        {
+            return _dbContext.Sales.AsEnumerable<Sale>().Where(id => id.UserId == idCustomer).ToList();
+        }
 
         public async Task<int> Register(Sale sale)
         {

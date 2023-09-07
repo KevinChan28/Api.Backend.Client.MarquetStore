@@ -22,7 +22,7 @@ namespace Api.Client.MarquetStore.Service.Imp
             return await _userRepository.GetUsers();
         }
 
-        public async Task<int> RegisterUser(UserRegister model)
+        public async Task<int> RegisterCustomer(UserRegister model)
         {
             User user = new User
             {
