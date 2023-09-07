@@ -37,7 +37,7 @@ namespace Api.Client.MarquetStore.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> RegisterUser([FromBody] UserRegister userNew)
+        public async Task<IActionResult> RegisterCustomer([FromBody] UserRegister userNew)
         {
             ResponseBase response = new ResponseBase();
             try
@@ -48,7 +48,7 @@ namespace Api.Client.MarquetStore.Controllers
                     response.Message = "User not";
                     return BadRequest();
                 }
-                int IdUser = await _userService.RegisterUser(userNew);
+                int IdUser = await _userService.RegisterCustomer(userNew);
                 if (IdUser > 0)
                 {
                     response.Success = true;

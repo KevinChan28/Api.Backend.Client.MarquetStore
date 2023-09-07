@@ -7,7 +7,7 @@ namespace Api.Client.MarquetStore.Service
     public interface IUserService
     {
         Task<UserTokens> ValidateCredentials(Login login);
-        Task<int> RegisterUser(UserRegister model);
+        Task<int> RegisterCustomer(UserRegister model);
         Task<List<User>> GetUsers();
     }
 }
