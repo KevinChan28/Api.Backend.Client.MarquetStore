@@ -20,7 +20,7 @@ namespace Api.Client.MarquetStore.Service.Imp
             {
                Name = a.Name,
                Description = a.Description,
-               Id = a.Id,
+               IdProduct = a.Id,
                Price = a.Price,
             }).ToList();
 

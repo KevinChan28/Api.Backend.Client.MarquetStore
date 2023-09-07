@@ -22,6 +22,42 @@ namespace Api.Client.MarquetStore.Service.Imp
             _databaseRepository = databaseRepository;
         }
 
+        public async Task<List<SalesOfCustomer>> GetSalesOfCustomer(int idCustomer)
+        {
+            List<Sale> sales = await _saleRepository.GetSalesOfCustomer(idCustomer);
+            List<Concept> concepts = await _conceptRepository.GetAllConcepts();
+            List<Personalization> personalizations = await _personalizationRepository.GetAllPersonalizations();
+            List<Product> products = await _productsRepository.GetProducts();
+            List<SalesOfCustomer> salesOfCustomers = sales.Select(a => new SalesOfCustomer
+            {
+                IdSale = a.Id,
+                CreatedDate = a.CreatedDate,
+                Total = a.Total,
+                IsDelivered = a.IsDelivered,
+                Concepts = concepts.Select(x => new ConceptsOfCustomer
+                {
+                    ConceptId = x.Id,
+                    Import = x.Import,
+                    Product = products.Select(u => new InformationProducts
+                    {
+                        IdProduct = u.Id,
+                        Name = u.Name,
+                        Description = u.Description,
+                        Price = u.Price
+                    }).FirstOrDefault(),
+                    Quantity = x.Quantity,
+                    SaleId = x.SaleId,
+                    Personalizations = personalizations.Select(x => new PersonalizationsOfCustomer
+                    {
+                        IdPersonalization= x.Id,
+                        ConceptId = x.Id,
+                        Ingredients = x.Id,
+                    }).Where(z => z.ConceptId == x.Id).ToList()
+                }).Where(c => c.SaleId == a.Id).ToList()
+            }).ToList();
+
+            return salesOfCustomers;
+        }
 
         public async Task<int> RegisterSale(SaleRegister model)
         {

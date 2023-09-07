@@ -5,5 +5,6 @@ namespace Api.Client.MarquetStore.Repository
     public interface IConceptRepository
     {
         Task<int> Register(Concept concept);
+        Task<List<Concept>> GetAllConcepts();
     }
 }

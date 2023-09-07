@@ -13,6 +13,10 @@ namespace Api.Client.MarquetStore.Repository.Imp
             _dbContext = dbContext;
         }
 
+        public async Task<List<Personalization>> GetAllPersonalizations()
+        {
+            return _dbContext.Personalizations.AsEnumerable<Personalization>().ToList();
+        }
 
         public async Task<int> Register(Personalization personalization)
         {
