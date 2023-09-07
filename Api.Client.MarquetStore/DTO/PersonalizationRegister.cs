@@ -2,6 +2,6 @@
 {
     public class PersonalizationRegister
     {
-        public int? IngredientId { get; set; }
+        public int IngredientId { get; set; }
     }
 }

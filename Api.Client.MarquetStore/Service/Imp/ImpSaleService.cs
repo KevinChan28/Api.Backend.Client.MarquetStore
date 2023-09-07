@@ -50,8 +50,8 @@ namespace Api.Client.MarquetStore.Service.Imp
                     Personalizations = personalizations.Select(x => new PersonalizationsOfCustomer
                     {
                         IdPersonalization= x.Id,
-                        ConceptId = x.Id,
-                        Ingredients = x.Id,
+                        ConceptId = x.ConceptId,
+                        Ingredients = x.IngredientId,
                     }).Where(z => z.ConceptId == x.Id).ToList()
                 }).Where(c => c.SaleId == a.Id).ToList()
             }).ToList();
