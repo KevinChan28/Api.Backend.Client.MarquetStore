@@ -14,6 +14,12 @@ namespace Api.Client.MarquetStore.Repository.Imp
             _dbContext = dbContext;
         }
 
+        public async Task<decimal> GetPriceProduct(int idProduct)
+        {
+            decimal price = await _dbContext.Products.Select(p => p.Price).FirstOrDefaultAsync();
+
+            return price;
+        }
 
         public async Task<Product> GetProductById(int idProduct)
         {

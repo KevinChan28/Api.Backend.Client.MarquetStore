@@ -67,32 +67,28 @@ namespace Api.Client.MarquetStore.Service.Imp
                 {
                     int conceptoId = 0;
                     int idPersonalization = 0;
-
-                    Product product = await _productsRepository.GetProductById(model.ProductId);
-
-                    if (product == null)
-                    {
-                        return 0;
-                    }
+                    decimal totalSale = 0;
 
                     Sale sale = new Sale
                     {
                         CreatedDate = DateTime.Now,
                         IsDelivered = false,
                         UserId = model.UserId,
-                        Total = model.Concepts.Sum(a => a.Quantity * product.Price)
                     };
                     int SaleId = await _saleRepository.Register(sale);
 
                     foreach (ConceptRegister requestConcept in model.Concepts)
                     {
+                        Product product = await _productsRepository.GetProductById(requestConcept.ProductId);
                         Concept conceptNew = new Concept
                         {
                             Quantity = requestConcept.Quantity,
-                            SaleId = sale.Id,
-                            ProductId = model.ProductId,
+                            SaleId = SaleId,
+                            ProductId = requestConcept.ProductId,
+                            Price = product.Price,
                             Import = requestConcept.Quantity * product.Price,
                         };
+                        requestConcept.Import = conceptNew.Import;
                          conceptoId = await _conceptRepository.Register(conceptNew);
 
                         product.Stock -= conceptNew.Quantity;
@@ -108,6 +104,11 @@ namespace Api.Client.MarquetStore.Service.Imp
                              idPersonalization = await _personalizationRepository.Register(personalization);
                         }
                     }
+
+                    totalSale = model.Concepts.Sum(a => a.Import);
+                    Sale saleUpdate = await _saleRepository.GetSaleById(SaleId);
+                    saleUpdate.Total = totalSale;
+                    await _saleRepository.UpdateSale(saleUpdate);
 
                     if (SaleId < 1 || conceptoId < 1 || idPersonalization < 1)
                     {
