@@ -37,5 +37,10 @@ namespace Api.Client.MarquetStore.Repository.Imp
         {
             return _dbContext.Users.Any(a => a.Email == user.Email && a.Password == user.Password);
         }
+
+        public async Task<bool> ValidateEmail(string email)
+        {
+            return _dbContext.Users.Any(x => x.Email.Equals(email));
+        }
     }
 }
