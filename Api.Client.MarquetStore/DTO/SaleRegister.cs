@@ -7,8 +7,6 @@ namespace Api.Client.MarquetStore.DTO
 
         public int UserId { get; set; }
         public List<ConceptRegister> Concepts { get; set; }
-        public int ProductId { get; set; }
-
         public SaleRegister()
         {
             this.Concepts = new List<ConceptRegister>();

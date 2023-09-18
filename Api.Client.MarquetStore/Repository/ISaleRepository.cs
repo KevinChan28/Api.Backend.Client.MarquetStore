@@ -6,5 +6,7 @@ namespace Api.Client.MarquetStore.Repository
     {
         Task<int> Register(Sale sale);
         Task<List<Sale>> GetSalesOfCustomer(int idCustomer);
+        Task UpdateSale(Sale sale);    
+        Task<Sale> GetSaleById(int idSale);
     }
 }

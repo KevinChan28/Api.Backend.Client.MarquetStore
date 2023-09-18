@@ -70,6 +70,7 @@ public partial class MarquetstoreDbContext : DbContext
             entity.Property(e => e.ProductId).HasColumnType("int(11)");
             entity.Property(e => e.Quantity).HasColumnType("int(11)");
             entity.Property(e => e.SaleId).HasColumnType("int(11)");
+            entity.Property(e => e.Price).HasPrecision(10);
         });
 
         modelBuilder.Entity<Ingredient>(entity =>
