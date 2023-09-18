@@ -5,6 +5,6 @@ namespace Api.Client.MarquetStore.Service
     public interface IProductsService
     {
         Task<int> RegisterProduct(ProductRegister model);
-        Task<List<InformationProducts>> GetProducts();
+        Task<ViewPrincipalProducts> GetProducts();
     }
 }
