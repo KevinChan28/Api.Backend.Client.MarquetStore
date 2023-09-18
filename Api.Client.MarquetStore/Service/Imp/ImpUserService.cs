@@ -66,5 +66,10 @@ namespace Api.Client.MarquetStore.Service.Imp
             }
             return null;
         }
+
+        public async Task<bool> ValidateEmail(string email)
+        {
+            return await _userRepository.ValidateEmail(email);
+        }
     }
 }

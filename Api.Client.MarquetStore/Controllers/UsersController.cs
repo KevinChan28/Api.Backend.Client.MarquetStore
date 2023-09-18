@@ -143,5 +143,35 @@ namespace Api.Client.MarquetStore.Controllers
             }
             return Ok(answer);
         }
+
+        /// <summary>
+        /// Validar si ya existe el email
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>booleano</returns>
+        [HttpGet("validate/email/{email}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
+        public async Task<IActionResult> ValidateEmail([FromRoute] string email)
+        {
+            ResponseBase answer = new ResponseBase();
+            try
+            {
+                // if (email != null)
+                //{
+                ArgumentNullException.ThrowIfNull(email);
+                    bool existEmail = await _userService.ValidateEmail(email);
+                    answer.Success = true;
+                    answer.Data = new {EmailExist = existEmail};
+               // }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+            return Ok(answer);
+        }
     }
 }
