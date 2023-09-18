@@ -13,16 +13,14 @@ namespace Api.Client.MarquetStore.Service.Imp
             _productsRepository = productsRepository;
         }
 
-        public async Task<List<InformationProducts>> GetProducts()
+        public async Task<ViewPrincipalProducts> GetProducts()
         {
             List<Product>getProducts = await _productsRepository.GetProducts();
-            List<InformationProducts> products = getProducts.Select(a => new InformationProducts
+            ViewPrincipalProducts products = new ViewPrincipalProducts
             {
-               Name = a.Name,
-               Description = a.Description,
-               IdProduct = a.Id,
-               Price = a.Price,
-            }).ToList();
+                TotalProduct = getProducts.Count(),
+                Products = getProducts
+            };
 
             return products;
         }

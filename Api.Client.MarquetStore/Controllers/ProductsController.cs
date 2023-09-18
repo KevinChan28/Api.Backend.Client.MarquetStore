@@ -77,7 +77,7 @@ namespace Api.Client.MarquetStore.Controllers
             ResponseBase answer = new ResponseBase();
             try
             {
-                List<InformationProducts> products = await _productsService.GetProducts();
+                ViewPrincipalProducts products = await _productsService.GetProducts();
 
                 if (products != null)
                 {
