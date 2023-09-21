@@ -6,11 +6,12 @@ namespace Api.Client.MarquetStore.DTO
 {
     public class ConceptRegister
     {
+        [Required]
         public int Quantity { get; set; }
-
+        [Required]
         public int ProductId { get; set; }
-        public decimal Import { get; set; } 
-
+        public decimal Import { get; set; }
+        [Required]
         public List<PersonalizationRegister> Personalizations { get; set; }
     }
 }

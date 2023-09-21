@@ -159,13 +159,10 @@ namespace Api.Client.MarquetStore.Controllers
             ResponseBase answer = new ResponseBase();
             try
             {
-                // if (email != null)
-                //{
                 ArgumentNullException.ThrowIfNull(email);
                     bool existEmail = await _userService.ValidateEmail(email);
                     answer.Success = true;
                     answer.Data = new {EmailExist = existEmail};
-               // }
             }
             catch (Exception ex)
             {

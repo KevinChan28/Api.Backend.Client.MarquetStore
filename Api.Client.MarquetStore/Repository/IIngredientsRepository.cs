@@ -6,6 +6,6 @@ namespace Api.Client.MarquetStore.Repository
     {
         Task<int> RegisterIngredient(Ingredient ingredient);
         Task<Ingredient> GetIngredientById(int idIngredient);
-        Task<List<Ingredient>> GetIngrendientsAvaliables();
+        Task<List<Ingredient>> GetIngrendientsAvailables();
     }
 }
