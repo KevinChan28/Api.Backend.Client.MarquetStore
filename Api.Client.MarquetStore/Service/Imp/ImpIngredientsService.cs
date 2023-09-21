@@ -33,9 +33,9 @@ namespace Api.Client.MarquetStore.Service.Imp
             return await _ingredientsRepository.GetIngredientById(idIngredient);
         }
 
-        public async Task<List<Ingredient>> GetIngredientsAvaliables()
+        public async Task<List<Ingredient>> GetIngredientsAvailables()
         {
-            return await _ingredientsRepository.GetIngrendientsAvaliables();
+            return await _ingredientsRepository.GetIngrendientsAvailables();
         }
     }
 }
