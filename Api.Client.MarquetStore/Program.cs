@@ -81,6 +81,8 @@ namespace Api.Client.MarquetStore
             builder.Services.AddTransient<IProductsService, ImpProductsService>();
             builder.Services.AddTransient<IIngredientsRepository, ImpIngredientsRepository>();
             builder.Services.AddTransient<IIngredientsService, ImpIngredientsService>();
+            builder.Services.AddTransient<IPayRepository, ImpPayRepository>();
+            builder.Services.AddTransient<IPayService, ImpPayService>();
 
             //CORS
             builder.Services.AddCors(options =>
