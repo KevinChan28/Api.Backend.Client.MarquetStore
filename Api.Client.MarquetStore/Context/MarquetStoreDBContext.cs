@@ -47,9 +47,10 @@ public partial class MarquetstoreDbContext : DbContext
             entity.HasIndex(e => e.UserId, "UserId_INDEX");
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
-            entity.Property(e => e.InteriorNumber).HasMaxLength(5);
+            entity.Property(e => e.InteriorNumber).HasMaxLength(10);
             entity.Property(e => e.Neighborhood).HasMaxLength(50);
-            entity.Property(e => e.OutdoorNumber).HasMaxLength(5);
+            entity.Property(e => e.Neighborhood).HasMaxLength(50);
+            entity.Property(e => e.OutdoorNumber).HasMaxLength(10);
             entity.Property(e => e.Street).HasMaxLength(50);
             entity.Property(e => e.UserId).HasColumnType("int(11)");
             entity.Property(e => e.ZipCode).HasMaxLength(5);
