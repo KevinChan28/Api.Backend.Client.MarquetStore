@@ -39,7 +39,7 @@ namespace Api.Client.MarquetStore.Controllers
                 if (model == null)
                 {
                     response.Success = false;
-                    response.Message = "Ingredient not";
+                    response.Message = "Pay not";
                     return BadRequest();
                 }
 
@@ -48,7 +48,7 @@ namespace Api.Client.MarquetStore.Controllers
                 if (idPay > 0)
                 {
                     response.Success = true;
-                    response.Message = "Ingredient register";
+                    response.Message = "Pay register";
                     response.Data = new { IdPay = idPay };
                 }
                 else
@@ -84,13 +84,13 @@ namespace Api.Client.MarquetStore.Controllers
                 if (pays != null)
                 {
                     answer.Success = true;
-                    answer.Message = "Search ingredient";
+                    answer.Message = "Search Pays";
                     answer.Data = pays;
                 }
                 else
                 {
                     answer.Success = false;
-                    answer.Message = "Ingredient not";
+                    answer.Message = "Pays not";
                     return NotFound(answer);
                 }
             }
