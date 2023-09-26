@@ -55,7 +55,6 @@ namespace Api.Client.MarquetStore.Service.Imp
                 UserTokens informationUser = new UserTokens
                 {
                     UserName = userValidate.Email,
-                    EmailId = userValidate.Email,
                     Id = userValidate.Id,
                     Rol = userValidate.RolId,
                     GuidId = Guid.NewGuid(),

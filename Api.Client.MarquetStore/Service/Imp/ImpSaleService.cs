@@ -11,15 +11,18 @@ namespace Api.Client.MarquetStore.Service.Imp
         IProductsRepository _productsRepository;
         IPersonalizationRepository _personalizationRepository;
         IDatabaseRepository _databaseRepository;
+        IIngredientsRepository _ingredientsRepository;
 
         public ImpSaleService(ISaleRepository saleServiceRepository, IConceptRepository conceptRepository,
-            IProductsRepository productsRepository, IPersonalizationRepository personalizationRepository, IDatabaseRepository databaseRepository)
+            IProductsRepository productsRepository, IPersonalizationRepository personalizationRepository, IDatabaseRepository databaseRepository,
+            IIngredientsRepository ingredientsRepository)
         {
             _saleRepository = saleServiceRepository;
             _conceptRepository = conceptRepository;
             _productsRepository = productsRepository;
             _personalizationRepository = personalizationRepository;
             _databaseRepository = databaseRepository;
+            _ingredientsRepository = ingredientsRepository;
         }
 
         public async Task<List<SalesOfCustomer>> GetSalesOfCustomer(int idCustomer)
@@ -67,7 +70,8 @@ namespace Api.Client.MarquetStore.Service.Imp
                 {
                     int conceptoId = 0;
                     int idPersonalization = 0;
-                    decimal totalSale = 0;
+                    decimal totalImport = 0;
+                    decimal totalIngredient = 0;
 
                     Sale sale = new Sale
                     {
@@ -88,26 +92,37 @@ namespace Api.Client.MarquetStore.Service.Imp
                             Price = product.Price,
                             Import = requestConcept.Quantity * product.Price,
                         };
-                        requestConcept.Import = conceptNew.Import;
+                        
+                        totalImport = conceptNew.Import + totalImport;
                          conceptoId = await _conceptRepository.Register(conceptNew);
 
                         product.Stock -= conceptNew.Quantity;
                         int productUpdated = await _productsRepository.Update(product);
 
+                        totalIngredient = 0;
+
                         foreach (PersonalizationRegister item in requestConcept.Personalizations)
                         {
+                            Ingredient ingredient = await _ingredientsRepository.GetIngredientById(item.IngredientId);
                             Personalization personalization = new Personalization
                             {
                                 ConceptId = conceptoId,
                                 IngredientId = item.IngredientId
                             };
                              idPersonalization = await _personalizationRepository.Register(personalization);
+                            totalIngredient = (conceptNew.Quantity * ingredient.Price) + totalIngredient;
                         }
+
+                        Concept conceptFind = await _conceptRepository.GetConceptById(conceptoId);
+                        conceptFind.Import += totalIngredient;
+                        await _conceptRepository.Update(conceptFind);
                     }
 
-                    totalSale = model.Concepts.Sum(a => a.Import);
+                    List<Concept> concepts = await _conceptRepository.GetSalesByIdSale(SaleId);
+                    totalImport = concepts.Sum(a => a.Import);
+
                     Sale saleUpdate = await _saleRepository.GetSaleById(SaleId);
-                    saleUpdate.Total = totalSale;
+                    saleUpdate.Total = totalImport;
                     await _saleRepository.UpdateSale(saleUpdate);
 
                     if (SaleId < 1 || conceptoId < 1 || idPersonalization < 1)

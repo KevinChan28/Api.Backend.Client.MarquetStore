@@ -14,8 +14,6 @@ namespace Api.Client.MarquetStore.Security
             {
                 new Claim("Id",userAccounts.Id.ToString()),
                 new Claim(ClaimTypes.Name, userAccounts.UserName),
-                new Claim(ClaimTypes.Email, userAccounts.EmailId),
-                new Claim(ClaimTypes.NameIdentifier, Id.ToString()),
                 new Claim(ClaimTypes.Expiration, DateTime.Now.AddDays(1).ToString("G")),
             };
 
@@ -74,7 +72,6 @@ namespace Api.Client.MarquetStore.Security
                     )
                     );
                 userToken.Token = new JwtSecurityTokenHandler().WriteToken(jwToken);
-                userToken.EmailId = modeL.EmailId;
                 userToken.UserName = modeL.UserName;
                 userToken.Id = modeL.Id;
                 userToken.GuidId = modeL.GuidId;
