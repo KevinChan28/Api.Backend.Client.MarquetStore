@@ -28,7 +28,7 @@ namespace Api.Client.MarquetStore.Repository.Imp
 
         public async Task<List<Product>> GetProducts()
         {
-            return  _dbContext.Products.AsEnumerable<Product>().ToList();
+            return _dbContext.Products.AsNoTracking<Product>().ToList();
         }
 
         public async Task<int> RegisterProduct(Product product)
