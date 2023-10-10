@@ -55,7 +55,6 @@ namespace Api.Client.MarquetStore.Service.Imp
                 UserTokens informationUser = new UserTokens
                 {
                     UserName = userValidate.Email,
-                    EmailId = userValidate.Email,
                     Id = userValidate.Id,
                     Rol = userValidate.RolId,
                     GuidId = Guid.NewGuid(),
@@ -65,6 +64,11 @@ namespace Api.Client.MarquetStore.Service.Imp
                 return token;
             }
             return null;
+        }
+
+        public async Task<bool> ValidateEmail(string email)
+        {
+            return await _userRepository.ValidateEmail(email);
         }
     }
 }

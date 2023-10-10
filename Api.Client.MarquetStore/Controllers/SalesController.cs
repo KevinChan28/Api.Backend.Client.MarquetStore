@@ -20,6 +20,7 @@ namespace Api.Client.MarquetStore.Controllers
             _saleService = saleService;
         }
 
+
         /// <summary>
         /// Registrar una compra
         /// </summary>
@@ -44,8 +45,8 @@ namespace Api.Client.MarquetStore.Controllers
                 if (IdSale > 0)
                 {
                     response.Success = true;
-                    response.Message = "user register";
-                    response.Data = new { IdUser = IdSale };
+                    response.Message = "SALE register";
+                    response.Data = new { IdSale = IdSale };
                 }
                 else
                 {

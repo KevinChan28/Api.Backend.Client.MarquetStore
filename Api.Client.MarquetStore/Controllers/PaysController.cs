@@ -1,6 +1,6 @@
 ﻿using Api.Client.MarquetStore.DTO;
-using Api.Client.MarquetStore.Models;
 using Api.Client.MarquetStore.Models.Others;
+using Api.Client.MarquetStore.Models;
 using Api.Client.MarquetStore.Service;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -12,42 +12,44 @@ namespace Api.Client.MarquetStore.Controllers
     [EnableCors("Cors")]
     [Route("[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class PaysController : ControllerBase
     {
-        private readonly IProductsService _productsService;
+        private readonly IPayService _payService;
 
-        public ProductsController(IProductsService productsService)
+        public PaysController(IPayService payService)
         {
-            _productsService = productsService;
+            _payService = payService;
         }
 
 
         /// <summary>
-        /// Registrar un producto
+        /// Registrar un pago
         /// </summary>
-        /// <returns>Id del producto nuevo</returns>
+        /// <returns>Id del pago nuevo</returns>
         /// <response code="200"> Exito </response>
         /// <response code="500">Ha ocurrido un error en la creación.</response>
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> RegisterProduct([FromBody] ProductRegister productNew)
+        public async Task<IActionResult> RegisterPay([FromBody] PayRegister model)
         {
             ResponseBase response = new ResponseBase();
             try
             {
-                if (productNew == null)
+                if (model == null)
                 {
                     response.Success = false;
-                    response.Message = "product not";
+                    response.Message = "Pay not";
                     return BadRequest();
                 }
-                int IdProduct = await _productsService.RegisterProduct(productNew);
-                if (IdProduct > 0)
+
+                int idPay = await _payService.RegisterPay(model);
+
+                if (idPay > 0)
                 {
                     response.Success = true;
-                    response.Message = "product register";
-                    response.Data = new { IdProduct = IdProduct };
+                    response.Message = "Pay register";
+                    response.Data = new { IdPay = idPay };
                 }
                 else
                 {
@@ -64,32 +66,32 @@ namespace Api.Client.MarquetStore.Controllers
         }
 
         /// <summary>
-        /// Obtener todos los productos
+        /// Obtener todos los pagos
         /// </summary>
         /// <param name=""></param>
-        /// <returns>Catalogo de productos</returns>
+        /// <returns> catalogo de pagos </returns>
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllPays()
         {
             ResponseBase answer = new ResponseBase();
             try
             {
-                ViewPrincipalProducts products = await _productsService.GetProducts();
-
-                if (products != null)
+                List<Pay> pays = await _payService.GetPays();
+                if (pays != null)
                 {
                     answer.Success = true;
-                    answer.Message = "Search succes";
-                    answer.Data = products;
+                    answer.Message = "Search Pays";
+                    answer.Data = pays;
                 }
                 else
                 {
                     answer.Success = false;
-                    return NoContent();
+                    answer.Message = "Pays not";
+                    return NotFound(answer);
                 }
             }
             catch (Exception ex)

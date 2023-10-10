@@ -26,7 +26,7 @@ namespace Api.Client.MarquetStore.Repository.Imp
             return await _dbContext.Ingredients.FirstOrDefaultAsync(i => i.Id == idIngredient);
         }
 
-        public async Task<List<Ingredient>> GetIngrendientsAvaliables()
+        public async Task<List<Ingredient>> GetIngrendientsAvailables()
         {
             return _dbContext.Ingredients.Where(i => i.IsAvailable == true).ToList();
         }

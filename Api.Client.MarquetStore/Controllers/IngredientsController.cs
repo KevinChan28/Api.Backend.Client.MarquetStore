@@ -21,6 +21,7 @@ namespace Api.Client.MarquetStore.Controllers
             _ingredientsService = ingredientsService;
         }
 
+
         /// <summary>
         /// Registrar un ingrediente
         /// </summary>
@@ -46,7 +47,7 @@ namespace Api.Client.MarquetStore.Controllers
                 {
                     response.Success = true;
                     response.Message = "Ingredient register";
-                    response.Data = new { idIngredient = idIngredient };
+                    response.Data = new { IdIngredient = idIngredient };
                 }
                 else
                 {
@@ -61,30 +62,31 @@ namespace Api.Client.MarquetStore.Controllers
 
             return Ok(response);
         }
+
         /// <summary>
         /// Obtener un ingrediente a partir de su ID
         /// </summary>
         /// <param name=""></param>
-        /// <returns>Buscar ingrediente </returns>
+        /// <returns> información del ingrediente </returns>
         [HttpGet("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
-        public async Task<IActionResult> GetIngredientById(int id)
+        public async Task<IActionResult> GetIngredientById([FromRoute]int idIngredient)
         {
             ResponseBase answer = new ResponseBase();
             try
             {
 
-                if (id < 1) 
+                if (idIngredient < 1) 
                 {
                     answer.Success = false;
-                    answer.Message = "Ingredient ID is invalid"; // 
+                    answer.Message = "Ingredient ID is invalid";
                     return BadRequest(answer); 
                 }
-                Ingredient idIngredient = await _ingredientsService.GetIngredientById(id);
-                if (idIngredient != null) 
+                Ingredient ingredient = await _ingredientsService.GetIngredientById(idIngredient);
+                if (ingredient != null) 
                 {
                     answer.Success = true;
                     answer.Message = "Search ingredient";
@@ -103,8 +105,9 @@ namespace Api.Client.MarquetStore.Controllers
             }
             return Ok(answer);
         }
+
         /// <summary>
-        /// Obtener todos los ingredientes
+        /// Obtener todos los ingredientes disponibles
         /// </summary>
         /// <param name=""></param>
         /// <returns>Catalogo de ingredientes</returns>
@@ -118,7 +121,7 @@ namespace Api.Client.MarquetStore.Controllers
             ResponseBase answer = new ResponseBase();
             try
             {
-                List<Ingredient> ingredients = await _ingredientsService.GetIngredientsAvaliables();
+                List<Ingredient> ingredients = await _ingredientsService.GetIngredientsAvailables();
 
                 if (ingredients != null)
                 {

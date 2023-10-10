@@ -1,6 +1,6 @@
 ﻿using Api.Client.MarquetStore.DTO;
-using Api.Client.MarquetStore.Models;
 using Api.Client.MarquetStore.Models.Others;
+using Api.Client.MarquetStore.Models;
 using Api.Client.MarquetStore.Service;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -12,42 +12,45 @@ namespace Api.Client.MarquetStore.Controllers
     [EnableCors("Cors")]
     [Route("[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class AddressesController : ControllerBase
     {
-        private readonly IProductsService _productsService;
+        private readonly IAddressService _addressService;
 
-        public ProductsController(IProductsService productsService)
+        public AddressesController(IAddressService addressService)
         {
-            _productsService = productsService;
+            _addressService = addressService;
         }
 
 
+
         /// <summary>
-        /// Registrar un producto
+        /// Registrar direccion
         /// </summary>
-        /// <returns>Id del producto nuevo</returns>
+        /// <returns>Id de la direcion nueva</returns>
         /// <response code="200"> Exito </response>
         /// <response code="500">Ha ocurrido un error en la creación.</response>
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> RegisterProduct([FromBody] ProductRegister productNew)
+        public async Task<IActionResult> RegisterAddress([FromBody] AddressRegister model)
         {
             ResponseBase response = new ResponseBase();
             try
             {
-                if (productNew == null)
+                if (model == null)
                 {
                     response.Success = false;
-                    response.Message = "product not";
+                    response.Message = "Address not";
                     return BadRequest();
                 }
-                int IdProduct = await _productsService.RegisterProduct(productNew);
-                if (IdProduct > 0)
+
+                int idAddress = await _addressService.RegisterAddres(model);
+
+                if (idAddress > 0)
                 {
                     response.Success = true;
-                    response.Message = "product register";
-                    response.Data = new { IdProduct = IdProduct };
+                    response.Message = "Address register";
+                    response.Data = new { IdAddress = idAddress };
                 }
                 else
                 {
@@ -64,32 +67,40 @@ namespace Api.Client.MarquetStore.Controllers
         }
 
         /// <summary>
-        /// Obtener todos los productos
+        /// Obtener direcciones de un cliente por su Id
         /// </summary>
-        /// <param name=""></param>
-        /// <returns>Catalogo de productos</returns>
-        [HttpGet]
+        /// <param name="idCustomer"></param>
+        /// <returns> información de la direccion </returns>
+        [HttpGet("{idCustomer}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetIngredientById([FromRoute] int idCustomer)
         {
             ResponseBase answer = new ResponseBase();
             try
             {
-                ViewPrincipalProducts products = await _productsService.GetProducts();
 
-                if (products != null)
+                if (idCustomer < 1)
+                {
+                    answer.Success = false;
+                    answer.Message = "Customer ID is invalid";
+                    return BadRequest(answer);
+                }
+                List<AddressCustomer> addresses = await _addressService.GetAddressOfCustomerById(idCustomer);
+
+                if (addresses != null)
                 {
                     answer.Success = true;
-                    answer.Message = "Search succes";
-                    answer.Data = products;
+                    answer.Message = "Search ingredient";
+                    answer.Data = addresses;
                 }
                 else
                 {
                     answer.Success = false;
-                    return NoContent();
+                    answer.Message = "Ingredient not";
+                    return NotFound(answer);
                 }
             }
             catch (Exception ex)

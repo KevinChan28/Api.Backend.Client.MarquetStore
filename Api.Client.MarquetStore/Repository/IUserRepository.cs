@@ -8,5 +8,6 @@ namespace Api.Client.MarquetStore.Repository
         Task<bool> ValidateCredentials(User user);  
         Task<User> GetUserByCredentials(User user);
         Task<List<User>> GetUsers();
+        Task<bool> ValidateEmail(string email);
     }
 }

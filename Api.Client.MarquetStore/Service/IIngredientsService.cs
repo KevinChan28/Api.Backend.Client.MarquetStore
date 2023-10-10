@@ -9,6 +9,6 @@ namespace Api.Client.MarquetStore.Service
 
         Task<Ingredient> GetIngredientById(int idIngredient);
 
-        Task<List<Ingredient>> GetIngredientsAvaliables();
+        Task<List<Ingredient>> GetIngredientsAvailables();
     }
 }

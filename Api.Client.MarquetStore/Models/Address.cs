@@ -13,9 +13,11 @@ public partial class Address
 
     public string Neighborhood { get; set; } = null!;
 
-    public string InteriorNumber { get; set; } = null!;
+    public string? InteriorNumber { get; set; } = null!;
 
-    public string OutdoorNumber { get; set; } = null!;
+    public string OutdoorNumber { get; set; }
+
+    public string References { get; set; } 
 
     public int UserId { get; set; }
 }
