@@ -19,7 +19,7 @@ namespace Api.Client.MarquetStore.Service.Imp
             List<Product> productsAvailables = getProducts.Where(a => a.IsAvailable == true && a.Stock > 0).ToList();
             ViewPrincipalProducts products = new ViewPrincipalProducts
             {
-                TotalProduct = getProducts.Count(),
+                TotalProduct = productsAvailables.Count(),
                 Products = productsAvailables
             };
 
