@@ -17,5 +17,15 @@ namespace Api.Client.MarquetStore.Service.Imp
             return await _paymentsMethodRepository.GetPaymentsMethods();
         }
 
+        public async Task<int> RegisterPaymentMethod(PaymentsMethod paymentMethod)
+        {
+            PaymentsMethod paymentNew = new PaymentsMethod
+            {
+                Description = paymentMethod.Description
+            };
+            int idPaymentMethod = await _paymentsMethodRepository.RegisterPaymentMethod(paymentNew);
+
+            return idPaymentMethod;
+        }
     }
 }

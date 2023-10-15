@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Api.Client.MarquetStore.DTO;
 
 namespace Api.Client.MarquetStore.Controllers
 {
@@ -54,6 +55,49 @@ namespace Api.Client.MarquetStore.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
             return Ok(answer);
+        }
+
+        /// <summary>
+        /// Registrar un metodo de pago
+        /// </summary>
+        /// <returns>Id del método de pago nuevo</returns>
+        /// <response code="200"> Exito </response>
+        /// <response code="500">Ha ocurrido un error en la creación.</response>
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> RegisterPaymentMethod([FromBody] PaymentsMethod paymentMethodNew)
+        {
+            ResponseBase response = new ResponseBase();
+            try
+            {
+                if (paymentMethodNew == null)
+                {
+                    response.Success = false;
+                    response.Message = "Payment method not";
+                    return BadRequest();
+                }
+
+                int idPaymentMethod = await _paymentsMethodService.RegisterPaymentMethod(paymentMethodNew);
+
+                if (idPaymentMethod > 0)
+                {
+                    response.Success = true;
+                    response.Message = "Payment method register";
+                    response.Data = new { idPaymentMethod = idPaymentMethod };
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    response.Message = ex.Message); ;
+            }
+
+            return Ok(response);
         }
     }
 }
