@@ -8,6 +8,8 @@ namespace Api.Client.MarquetStore.DTO
         [Required]
         public int UserId { get; set; }
         [Required]
+        public int Total { get; set; }
+        [Required]
         public List<ConceptRegister> Concepts { get; set; }
         public SaleRegister()
         {
