@@ -64,13 +64,12 @@ namespace Api.Client.MarquetStore.Service.Imp
 
         public async Task<int> RegisterSale(SaleRegister model)
         {
-            using (var trasaction = await _databaseRepository.BeginTransaction())
+            using (var transaction = await _databaseRepository.BeginTransaction())
             {
                 try
                 {
                     int conceptoId = 0;
                     int idPersonalization = 0;
-                    decimal totalImport = 0;
                     decimal totalIngredient = 0;
 
                     Sale sale = new Sale
@@ -78,6 +77,7 @@ namespace Api.Client.MarquetStore.Service.Imp
                         CreatedDate = DateTime.Now,
                         IsDelivered = false,
                         UserId = model.UserId,
+                        Total = model.Total
                     };
                     int SaleId = await _saleRepository.Register(sale);
 
@@ -93,7 +93,6 @@ namespace Api.Client.MarquetStore.Service.Imp
                             Import = requestConcept.Quantity * product.Price,
                         };
                         
-                        totalImport = conceptNew.Import + totalImport;
                          conceptoId = await _conceptRepository.Register(conceptNew);
 
                         product.Stock -= conceptNew.Quantity;
@@ -118,26 +117,19 @@ namespace Api.Client.MarquetStore.Service.Imp
                         await _conceptRepository.Update(conceptFind);
                     }
 
-                    List<Concept> concepts = await _conceptRepository.GetSalesByIdSale(SaleId);
-                    totalImport = concepts.Sum(a => a.Import);
-
-                    Sale saleUpdate = await _saleRepository.GetSaleById(SaleId);
-                    saleUpdate.Total = totalImport;
-                    await _saleRepository.UpdateSale(saleUpdate);
-
                     if (SaleId < 1 || conceptoId < 1 || idPersonalization < 1)
                     {
-                        trasaction.Rollback();
+                        transaction.Rollback();
                         return 0;
                     }
 
-                    trasaction.Commit();
+                    transaction.Commit();
                     return SaleId;
                 }
                 catch (Exception)
                 {
 
-                    trasaction.Rollback();
+                    transaction.Rollback();
                 }
 
                 return 0;
