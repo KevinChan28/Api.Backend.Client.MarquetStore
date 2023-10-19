@@ -28,6 +28,11 @@ namespace Api.Client.MarquetStore.Repository.Imp
             return _dbContext.Users.FirstOrDefault(a => a.Email == user.Email && a.Password == user.Password);
         }
 
+        public async Task<User> GetUserById(int idUser)
+        {
+            return _dbContext.Users.Where(i => i.Id == idUser).FirstOrDefault();
+        }
+
         public async Task<List<User>> GetUsers()
         {
             return _dbContext.Users.AsEnumerable<User>().ToList();

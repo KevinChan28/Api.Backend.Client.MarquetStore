@@ -9,6 +9,7 @@ namespace Api.Client.MarquetStore.Service
         Task<UserTokens> ValidateCredentials(Login login);
         Task<int> RegisterCustomer(UserRegister model);
         Task<List<User>> GetUsers();
-        Task<bool> ValidateEmail(string email); 
+        Task<bool> ValidateEmail(string email);
+        Task<User> GetUserById(int idUser);
     }
 }

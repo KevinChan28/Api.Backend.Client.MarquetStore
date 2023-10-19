@@ -17,6 +17,11 @@ namespace Api.Client.MarquetStore.Service.Imp
             _jwtSettings = jwtSettings;
         }
 
+        public async Task<User> GetUserById(int idUser)
+        {
+            return await _userRepository.GetUserById(idUser);
+        }
+
         public async Task<List<User>> GetUsers()
         {
             return await _userRepository.GetUsers();
