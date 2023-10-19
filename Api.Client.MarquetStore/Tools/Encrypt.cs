@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿
+using System.Security.Cryptography;
+
 using System.Text;
 
 namespace Api.Client.MarquetStore.Tools
