@@ -38,6 +38,14 @@ namespace Api.Client.MarquetStore.Repository.Imp
             return _dbContext.Users.AsEnumerable<User>().ToList();
         }
 
+        public async Task<int> Update(User user)
+        {
+            EntityEntry<User> updatedUser = _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+
+            return updatedUser.Entity.Id;
+        }
+
         public async Task<bool> ValidateCredentials(User user)
         {
             return _dbContext.Users.Any(a => a.Email == user.Email && a.Password == user.Password);

@@ -10,5 +10,6 @@ namespace Api.Client.MarquetStore.Repository
         Task<List<User>> GetUsers();
         Task<bool> ValidateEmail(string email);
         Task<User> GetUserById(int idUser);
+        Task<int> Update(User user);
     }
 }

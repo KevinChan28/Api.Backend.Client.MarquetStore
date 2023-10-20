@@ -43,6 +43,24 @@ namespace Api.Client.MarquetStore.Service.Imp
             return userId;
         }
 
+        public async Task<int> UpdateCustomer(UserUpdate model)
+        {
+            User userFinded = await _userRepository.GetUserById(model.Id);
+
+            if (userFinded != null)
+            {
+                userFinded.Email = model.Email;
+                userFinded.LastName = model.LastName;
+                userFinded.Telephone = model.Telephone;
+                userFinded.Name = model.Name;
+                int userId = await _userRepository.Update(userFinded);
+
+                return userId;
+            }
+
+            return 0;
+        }
+
         public async Task<UserTokens> ValidateCredentials(Login login)
         {
             UserTokens token = new UserTokens();
