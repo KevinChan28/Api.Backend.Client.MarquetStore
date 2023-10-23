@@ -36,6 +36,11 @@ public partial class MarquetstoreDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<Coupon> Coupons { get; set; }
+
+    public virtual DbSet<Exchange> Exchanges { get; set; }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Address>(entity =>
@@ -179,6 +184,38 @@ public partial class MarquetstoreDbContext : DbContext
             entity.Property(e => e.Password).HasMaxLength(900);
             entity.Property(e => e.RolId).HasColumnType("int(11)");
             entity.Property(e => e.Telephone).HasMaxLength(20);
+        });
+
+        modelBuilder.Entity<Coupon>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("Coupon");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.Code).HasMaxLength(5);
+            entity.Property(e => e.Description).HasMaxLength(800);
+            entity.Property(e => e.Discount).HasPrecision(10);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Duration).HasColumnType("int(11)");
+            entity.Property(e => e.Quantity).HasColumnType("int(11)");
+        });
+
+        modelBuilder.Entity<Exchange>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("Exchange");
+
+            entity.HasIndex(e => e.UserId, "UserId_INDEX");
+            entity.HasIndex(e => e.CouponId, "CouponId_INDEX");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.IsUsed).HasColumnType("bit(1)");
+            entity.Property(e => e.ExpiredDate).HasColumnType("datetime");
+            entity.Property(e => e.UserId).HasColumnType("int(11)");
+            entity.Property(e => e.CouponId).HasColumnType("int(11)");
+            entity.Property(e => e.Count).HasColumnType("int(11)");
         });
 
         OnModelCreatingPartial(modelBuilder);
