@@ -2,6 +2,8 @@
 using Api.Client.MarquetStore.Models;
 using Api.Client.MarquetStore.Models.Others;
 using Api.Client.MarquetStore.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -64,7 +66,7 @@ namespace Api.Client.MarquetStore.Controllers
         }
 
         /// <summary>
-        /// Obtener todos los productos
+        /// Obtener todos los productos disponibles
         /// </summary>
         /// <param name=""></param>
         /// <returns>Catalogo de productos</returns>
@@ -72,7 +74,7 @@ namespace Api.Client.MarquetStore.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "AdministratorOrUser")]
         public async Task<IActionResult> GetAllProducts()
         {
             ResponseBase answer = new ResponseBase();

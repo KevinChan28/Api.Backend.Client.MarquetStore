@@ -16,11 +16,13 @@ namespace Api.Client.MarquetStore.Controllers
     {
         private readonly ISaleService _saleService;
         private readonly IUserService _userService;
+        private readonly IExchangeService _exchangeService;
 
-        public CustomerController(ISaleService saleService, IUserService userService)
+        public CustomerController(ISaleService saleService, IUserService userService, IExchangeService exchangeService)
         {
             _saleService = saleService;
             _userService = userService;
+            _exchangeService = exchangeService;
         }
 
         /// <summary>
@@ -128,6 +130,51 @@ namespace Api.Client.MarquetStore.Controllers
                     response.Message = ex.Message); ;
             }
             return Ok(response);
+        }
+
+        /// <summary>
+        /// Obtener los cupones de un cliente por su Id
+        /// </summary>
+        /// <param name="idCustomer"></param>
+        /// <returns> información del ingrediente </returns>
+        [HttpGet("/Exchange/{idCustomer}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
+        public async Task<IActionResult> GetIngredientById([FromRoute] int idCustomer)
+        {
+            ResponseBase answer = new ResponseBase();
+            try
+            {
+
+                if (idCustomer < 1)
+                {
+                    answer.Success = false;
+                    answer.Message = "Customer Id is invalid";
+                    return BadRequest(answer);
+                }
+
+                List<CouponsOfCustomer> couponsOfCusomer = await _exchangeService.GetAllExchangesOfCustomer(idCustomer);
+
+                if (couponsOfCusomer != null)
+                {
+                    answer.Success = true;
+                    answer.Message = "Search success";
+                    answer.Data = couponsOfCusomer;
+                }
+                else
+                {
+                    answer.Success = false;
+                    answer.Message = "coupons not";
+                    return NotFound(answer);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+            return Ok(answer);
         }
     }
 }

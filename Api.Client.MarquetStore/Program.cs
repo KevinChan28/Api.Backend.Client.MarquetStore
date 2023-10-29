@@ -9,6 +9,7 @@ using Api.Client.MarquetStore.Repository.Imp;
 using Api.Client.MarquetStore.Repository;
 using Api.Client.MarquetStore.Service;
 using Api.Client.MarquetStore.Service.Imp;
+using Api.Client.MarquetStore.Models.Others;
 
 namespace Api.Client.MarquetStore
 {
@@ -67,7 +68,7 @@ namespace Api.Client.MarquetStore
             {
                 options.AddPolicy("customerOnlyPolicy", policy => policy.RequireClaim("CustomerOnly", "Customer"));
                 options.AddPolicy("AdministratorOrUser", policy =>
-                     policy.RequireRole("Administrator", "Customer"));
+                     policy.RequireRole(DataRoles.ADMINISTRATOR, DataRoles.CUSTOMER));
             });
 
             builder.Services.AddTransient<IUserRepository, ImpUserRepository>();
@@ -87,6 +88,9 @@ namespace Api.Client.MarquetStore
             builder.Services.AddTransient<IAddressService, ImpAddressService>();
             builder.Services.AddTransient<IPaymentsMethodRepository, ImpPaymentsMethodRepository>();
             builder.Services.AddTransient<IPaymentsMethodService, ImpPaymentsMethodService>();
+            builder.Services.AddTransient<IExchangeRepository, ImpExchangeRepository>();
+            builder.Services.AddTransient<IExchangeService, ImpExchangeService>();
+            builder.Services.AddTransient<ICouponRepository, ImpCouponRepository>();
 
             //CORS
             builder.Services.AddCors(options =>

@@ -1,7 +1,10 @@
-﻿namespace Api.Client.MarquetStore.Repository
+﻿using Api.Client.MarquetStore.Models;
+
+namespace Api.Client.MarquetStore.Repository
 {
     public interface IExchangeRepository
     {
-        Task<>
+        Task<int> Register(Exchange exchange);
+        Task<List<Exchange>> GetExchanges();
     }
 }
