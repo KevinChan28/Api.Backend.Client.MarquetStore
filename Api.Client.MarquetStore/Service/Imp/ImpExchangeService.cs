@@ -24,7 +24,7 @@ namespace Api.Client.MarquetStore.Service.Imp
             if (coupon != null)
             {
                 List<Exchange> exchanges = await _exchangeRepository.GetExchanges();
-                Exchange couponCustomer = exchanges.Where(z => z.Id == idCustomer && z.CouponId == idCoupon).FirstOrDefault();
+                Exchange couponCustomer = exchanges.Where(z => z.UserId == idCustomer && z.CouponId == idCoupon).FirstOrDefault();
 
                 if (couponCustomer != null)
                 {
