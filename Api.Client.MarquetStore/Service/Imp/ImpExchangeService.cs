@@ -20,14 +20,13 @@ namespace Api.Client.MarquetStore.Service.Imp
         public async Task<List<CouponsOfCustomer>> GetAllExchangesOfCustomer(int idCustomer)
         {
             List<Exchange> exchanges = await _exchangeRepository.GetExchanges();
-            List<Exchange> couponsOfCustomer = exchanges.Where(x => x.UserId == idCustomer).ToList();   
+            List<Exchange> couponsOfCustomer = exchanges.Where(x => x.UserId == idCustomer && x.IsUsed == false).ToList();   
             List<Coupon> coupons = await _couponRepository.GetAllCoupons();
             List<CouponsOfCustomer> view = couponsOfCustomer.Select(z => new CouponsOfCustomer
             {
                 Id = z.Id,
                 Coupon = coupons.Where(c => c.Id == z.CouponId).FirstOrDefault(),
                 ExpiredDate = z.ExpiredDate,
-                IsUsed = z.IsUsed,
                 Count = z.Count,
                 IsExpired = z.ExpiredDate > DateTime.Now ? false : true
             }).ToList();
