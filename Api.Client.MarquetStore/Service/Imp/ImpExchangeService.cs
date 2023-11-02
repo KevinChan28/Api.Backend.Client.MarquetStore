@@ -47,7 +47,7 @@ namespace Api.Client.MarquetStore.Service.Imp
             List<Coupon> coupons = await _couponRepository.GetAllCoupons();
             List<CouponsOfCustomer> view = couponsOfCustomer.Select(z => new CouponsOfCustomer
             {
-                Id = z.Id,
+                IdExchange = z.Id,
                 Coupon = coupons.Where(c => c.Id == z.CouponId).FirstOrDefault(),
                 ExpiredDate = z.ExpiredDate,
                 Count = z.Count,
