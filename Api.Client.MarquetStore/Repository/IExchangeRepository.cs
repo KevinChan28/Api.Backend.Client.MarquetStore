@@ -6,5 +6,6 @@ namespace Api.Client.MarquetStore.Repository
     {
         Task<int> Register(Exchange exchange);
         Task<List<Exchange>> GetExchanges();
+        Task<int> Update(Exchange exchange);
     }
 }

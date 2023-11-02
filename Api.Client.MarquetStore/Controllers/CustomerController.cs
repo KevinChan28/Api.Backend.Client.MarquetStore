@@ -176,5 +176,41 @@ namespace Api.Client.MarquetStore.Controllers
             }
             return Ok(answer);
         }
+
+        /// <summary>
+        /// Modificar que el cupon ya fue usado
+        /// </summary>
+        /// <param name="idCustomer"></param>
+        /// <param name="idCoupon"></param>
+        /// <returns> información del ingrediente </returns>
+        [HttpPut("/Exchange/{idCustomer}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
+        public async Task<IActionResult> GetIngredientById([FromRoute] int idCustomer, int idCoupon)
+        {
+            ResponseBase answer = new ResponseBase();
+            bool updated;
+            try
+            {
+
+                if (idCustomer < 1 && idCoupon < 1)
+                {
+                    answer.Success = false;
+                    answer.Message = "Customer Id or Coupon Id is invalid";
+                    return BadRequest(answer);
+                }
+
+                    updated = await _exchangeService.CouponUsed(idCustomer, idCoupon);
+                    answer.Success = updated;
+                    answer.Message = "Updated success";
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+            return updated == true ? Ok(answer) : NotFound("Failed");
+        }
     }
 }

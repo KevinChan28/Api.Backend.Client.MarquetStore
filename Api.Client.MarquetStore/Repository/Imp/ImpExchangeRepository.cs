@@ -27,5 +27,13 @@ namespace Api.Client.MarquetStore.Repository.Imp
 
             return newExchange.Entity.Id;
         }
+
+        public async Task<int> Update(Exchange exchange)   
+        {
+            EntityEntry<Exchange> updadte = _dbContext.Exchanges.Update(exchange);
+            await _dbContext.SaveChangesAsync();
+
+            return updadte.Entity.Id;
+        }
     }
 }

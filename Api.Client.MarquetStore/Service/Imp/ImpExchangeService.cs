@@ -17,6 +17,29 @@ namespace Api.Client.MarquetStore.Service.Imp
             _saleRepository = saleRepository;
         }
 
+        public async Task<bool> CouponUsed(int idCoupon, int idCustomer)
+        {
+            Coupon coupon = await _couponRepository.GetCouponById(idCoupon);
+
+            if (coupon != null)
+            {
+                List<Exchange> exchanges = await _exchangeRepository.GetExchanges();
+                Exchange couponCustomer = exchanges.Where(z => z.Id == idCustomer && z.CouponId == idCoupon).FirstOrDefault();
+
+                if (couponCustomer != null)
+                {
+                    couponCustomer.IsUsed = true;
+                    await _exchangeRepository.Update(couponCustomer);
+
+                    return true;
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+
         public async Task<List<CouponsOfCustomer>> GetAllExchangesOfCustomer(int idCustomer)
         {
             List<Exchange> exchanges = await _exchangeRepository.GetExchanges();
