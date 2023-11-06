@@ -13,6 +13,19 @@ namespace Api.Client.MarquetStore.Service.Imp
             _addressRepository = addressRepository;
         }
 
+        public async Task<bool> Delete(int idAddress)
+        {
+            Address addressFind = await _addressRepository.GetAddressById(idAddress);
+
+            if (addressFind != null)
+            {
+                await _addressRepository.Delete(addressFind);
+
+                return true;
+            }
+
+            return false;
+        }
 
         public async Task<List<AddressCustomer>> GetAddressOfCustomerById(int idCustomer)
         {
@@ -46,6 +59,27 @@ namespace Api.Client.MarquetStore.Service.Imp
             int idAddress = await _addressRepository.Register(address);
 
             return idAddress;
+        }
+
+        public async Task<int> Update(AddressCustomer model)
+        {
+            Address addressFind = await _addressRepository.GetAddressById(model.Id);
+
+            if (addressFind != null)
+            {
+                addressFind.Street = model.Street;
+                addressFind.Neighborhood = model.Neighborhood;
+                addressFind.References = model.References;
+                addressFind.ZipCode = model.ZipCode;
+                addressFind.InteriorNumber = model.InteriorNumber;
+                addressFind.OutdoorNumber = model.OutdoorNumber;
+
+                int idAddress = await _addressRepository.Update(addressFind);
+
+                return idAddress;
+            }
+
+            return 0;
         }
     }
 }

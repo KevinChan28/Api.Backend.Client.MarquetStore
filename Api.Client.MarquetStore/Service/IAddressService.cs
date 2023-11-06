@@ -6,5 +6,7 @@ namespace Api.Client.MarquetStore.Service
     {
         Task<int> RegisterAddres(AddressRegister model);
         Task<List<AddressCustomer>> GetAddressOfCustomerById(int idCustomer);
+        Task<int> Update(AddressCustomer model);
+        Task<bool> Delete(int idAddress);
     }
 }

@@ -100,16 +100,19 @@ namespace Api.Client.MarquetStore.Service.Imp
 
                         totalIngredient = 0;
 
-                        foreach (PersonalizationRegister item in requestConcept.Personalizations)
+                        if (requestConcept.Personalizations != null)
                         {
-                            Ingredient ingredient = await _ingredientsRepository.GetIngredientById(item.IngredientId);
-                            Personalization personalization = new Personalization
+                            foreach (PersonalizationRegister? item in requestConcept.Personalizations)
                             {
-                                ConceptId = conceptoId,
-                                IngredientId = item.IngredientId
-                            };
-                             idPersonalization = await _personalizationRepository.Register(personalization);
-                            totalIngredient = (conceptNew.Quantity * ingredient.Price) + totalIngredient;
+                                Ingredient ingredient = await _ingredientsRepository.GetIngredientById(item.IngredientId);
+                                Personalization personalization = new Personalization
+                                {
+                                    ConceptId = conceptoId,
+                                    IngredientId = item.IngredientId
+                                };
+                                idPersonalization = await _personalizationRepository.Register(personalization);
+                                totalIngredient = (conceptNew.Quantity * ingredient.Price) + totalIngredient;
+                            }
                         }
 
                         Concept conceptFind = await _conceptRepository.GetConceptById(conceptoId);
@@ -117,7 +120,7 @@ namespace Api.Client.MarquetStore.Service.Imp
                         await _conceptRepository.Update(conceptFind);
                     }
 
-                    if (SaleId < 1 || conceptoId < 1 || idPersonalization < 1)
+                    if (SaleId < 1 || conceptoId < 1)
                     {
                         transaction.Rollback();
                         return 0;

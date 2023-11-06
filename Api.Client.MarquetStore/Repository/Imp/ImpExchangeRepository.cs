@@ -17,7 +17,7 @@ namespace Api.Client.MarquetStore.Repository.Imp
 
         public async Task<List<Exchange>> GetExchanges()
         {
-            return await _dbContext.Exchanges.AsNoTracking<Exchange>().ToListAsync();
+            return await _dbContext.Exchanges.OrderByDescending(x => x.Id).AsNoTracking<Exchange>().ToListAsync();
         }
 
         public async Task<int> Register(Exchange exchange)
