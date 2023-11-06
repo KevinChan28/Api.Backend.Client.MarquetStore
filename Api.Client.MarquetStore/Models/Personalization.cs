@@ -9,5 +9,5 @@ public partial class Personalization
 
     public int ConceptId { get; set; }
 
-    public int IngredientId { get; set; }
+    public int? IngredientId { get; set; }
 }

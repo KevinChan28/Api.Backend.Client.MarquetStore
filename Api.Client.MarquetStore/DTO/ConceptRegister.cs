@@ -10,6 +10,6 @@ namespace Api.Client.MarquetStore.DTO
         public int Quantity { get; set; }
         [Required]
         public int ProductId { get; set; }
-        public List<PersonalizationRegister> Personalizations { get; set; }
+        public List<PersonalizationRegister>? Personalizations { get; set; }
     }
 }

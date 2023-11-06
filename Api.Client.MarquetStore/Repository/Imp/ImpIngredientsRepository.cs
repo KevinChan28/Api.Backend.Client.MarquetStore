@@ -21,7 +21,7 @@ namespace Api.Client.MarquetStore.Repository.Imp
             return ingredientNew.Entity.Id;
         }
 
-        public async Task<Ingredient> GetIngredientById(int idIngredient)
+        public async Task<Ingredient> GetIngredientById(int? idIngredient)
         {
             return await _dbContext.Ingredients.FirstOrDefaultAsync(i => i.Id == idIngredient);
         }

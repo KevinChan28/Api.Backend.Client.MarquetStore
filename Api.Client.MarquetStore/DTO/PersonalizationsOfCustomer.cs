@@ -8,6 +8,6 @@ namespace Api.Client.MarquetStore.DTO
 
         public int ConceptId { get; set; }
 
-        public int Ingredients { get; set; }
+        public int? Ingredients { get; set; }
     }
 }

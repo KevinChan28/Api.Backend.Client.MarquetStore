@@ -67,40 +67,95 @@ namespace Api.Client.MarquetStore.Controllers
         }
 
         /// <summary>
-        /// Obtener direcciones de un cliente por su Id
+        /// Actualizar datos de la direccion
         /// </summary>
-        /// <param name="idCustomer"></param>
         /// <returns> información de la direccion </returns>
-        [HttpGet("{idCustomer}")]
+        [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
-        public async Task<IActionResult> GetIngredientById([FromRoute] int idCustomer)
+        public async Task<IActionResult> UpdateAddress([FromBody] AddressCustomer addressCustomer)
         {
             ResponseBase answer = new ResponseBase();
             try
             {
+            
+                int idAddress = await _addressService.Update(addressCustomer);
 
-                if (idCustomer < 1)
-                {
-                    answer.Success = false;
-                    answer.Message = "Customer ID is invalid";
-                    return BadRequest(answer);
-                }
-                List<AddressCustomer> addresses = await _addressService.GetAddressOfCustomerById(idCustomer);
-
-                if (addresses != null)
+                if (idAddress > 0)
                 {
                     answer.Success = true;
-                    answer.Message = "Search ingredient";
-                    answer.Data = addresses;
+                    answer.Message = "Address updated";
+                    answer.Data = idAddress;
                 }
                 else
                 {
                     answer.Success = false;
                     answer.Message = "Ingredient not";
-                    return NotFound(answer);
+                    return BadRequest(answer);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+            return Ok(answer);
+        }
+
+        /// <summary>
+        /// Eliminar direccion
+        /// </summary>
+        /// <returns>booleano</returns>
+        /// <response code="200"> Exito </response>
+        /// <response code="500">Ha ocurrido un error en la creación.</response>
+        [HttpDelete("{idAddress}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> DeleteAddress([FromRoute] int idAddress)
+        {
+            ResponseBase response = new ResponseBase();
+            try
+            {
+
+                response.Success = await _addressService.Delete(idAddress);
+
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    response.Message = ex.Message); ;
+            }
+
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
+        /// Obtener las direcciones de un cliente
+        /// </summary>
+        /// <returns>Lista de objetos Addrwss</returns>
+        [HttpGet("User/{idCustomer}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
+        public async Task<IActionResult> GetAddressOfCustomer([FromRoute]int idCustomer)
+        {
+            ResponseBase answer = new ResponseBase();
+            try
+            {
+                List<AddressCustomer> addresses = await _addressService.GetAddressOfCustomerById(idCustomer);
+
+                if (addresses != null)
+                {
+                    answer.Success = true;
+                    answer.Message = "Search success";
+                    answer.Data = addresses;
+                }
+                else
+                {
+                    answer.Success = false;
+                    return NoContent();
                 }
             }
             catch (Exception ex)

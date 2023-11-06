@@ -137,7 +137,7 @@ namespace Api.Client.MarquetStore.Controllers
         /// </summary>
         /// <param name="idCustomer"></param>
         /// <returns> información del ingrediente </returns>
-        [HttpGet("/Exchange/{idCustomer}")]
+        [HttpGet("Exchange/{idCustomer}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
@@ -183,7 +183,7 @@ namespace Api.Client.MarquetStore.Controllers
         /// <param name="idCustomer"></param>
         /// <param name="idCoupon"></param>
         /// <returns> información del ingrediente </returns>
-        [HttpPut("/Exchange/{idCustomer}/{idCoupon}")]
+        [HttpPut("Exchange/{idCustomer}/{idCoupon}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]

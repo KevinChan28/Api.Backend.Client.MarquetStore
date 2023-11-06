@@ -4,7 +4,6 @@ namespace Api.Client.MarquetStore.DTO
 {
     public class PersonalizationRegister
     {
-        [Required]
-        public int IngredientId { get; set; }
+        public int? IngredientId { get; set; }
     }
 }
