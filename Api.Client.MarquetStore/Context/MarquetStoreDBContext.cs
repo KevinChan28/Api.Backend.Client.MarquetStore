@@ -164,7 +164,7 @@ public partial class MarquetstoreDbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-            entity.Property(e => e.IsDelivered).HasColumnType("bit(1)");
+            entity.Property(e => e.Status).HasMaxLength(200);
             entity.Property(e => e.Total).HasPrecision(10);
             entity.Property(e => e.UserId).HasColumnType("int(11)");
         });
