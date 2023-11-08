@@ -1,5 +1,6 @@
 ﻿using Api.Client.MarquetStore.DTO;
 using Api.Client.MarquetStore.Models;
+using Api.Client.MarquetStore.Models.Others;
 using Api.Client.MarquetStore.Repository;
 
 namespace Api.Client.MarquetStore.Service.Imp
@@ -36,7 +37,7 @@ namespace Api.Client.MarquetStore.Service.Imp
                 IdSale = a.Id,
                 CreatedDate = a.CreatedDate,
                 Total = a.Total,
-                IsDelivered = a.IsDelivered,
+                Status = a.Status,
                 Concepts = concepts.Select(x => new ConceptsOfCustomer
                 {
                     ConceptId = x.Id,
@@ -75,7 +76,7 @@ namespace Api.Client.MarquetStore.Service.Imp
                     Sale sale = new Sale
                     {
                         CreatedDate = DateTime.Now,
-                        IsDelivered = false,
+                        Status = Status.PENDING,
                         UserId = model.UserId,
                         Total = model.Total
                     };

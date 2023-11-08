@@ -10,7 +10,7 @@ namespace Api.Client.MarquetStore.DTO
 
         public decimal Total { get; set; }
 
-        public bool? IsDelivered { get; set; }
+        public string? Status { get; set; }
         public List<ConceptsOfCustomer> Concepts { get; set; }
     }
 }
