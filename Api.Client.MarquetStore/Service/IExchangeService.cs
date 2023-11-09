@@ -5,7 +5,7 @@ namespace Api.Client.MarquetStore.Service
 {
     public interface IExchangeService
     {
-        Task<int> GiveCouponToCustomer(int idCustomer);
+        Task<CouponReceived> GiveCouponToCustomer(int idCustomer);
         Task<List<CouponsOfCustomer>> GetAllExchangesOfCustomer(int idCustomer);
         Task<bool> CouponUsed(int idCoupon, int idCustomer);
     }

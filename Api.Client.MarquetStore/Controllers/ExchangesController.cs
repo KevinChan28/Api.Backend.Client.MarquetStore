@@ -39,13 +39,13 @@ namespace Api.Client.MarquetStore.Controllers
                     return BadRequest();
                 }
 
-                int idExchange = await _exchangeService.GiveCouponToCustomer(idCustomer);
+                CouponReceived couponReceived = await _exchangeService.GiveCouponToCustomer(idCustomer);
 
-                if (idExchange > 0)
+                if (couponReceived != null)
                 {
                     response.Success = true;
                     response.Message = "Coupon awarded";
-                    response.Data = new { IdExchange = idExchange };
+                    response.Data = couponReceived;
                 }
                 else
                 {

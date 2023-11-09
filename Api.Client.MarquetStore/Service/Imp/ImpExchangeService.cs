@@ -57,7 +57,7 @@ namespace Api.Client.MarquetStore.Service.Imp
             return view;
         }
 
-        public async Task<int> GiveCouponToCustomer(int idCustomer)
+        public async Task<CouponReceived> GiveCouponToCustomer(int idCustomer)
         {
             List<Exchange> exchanges = await _exchangeRepository.GetExchanges();
             List<Exchange> exchangesOfCustomer =  exchanges.Where(z => z.UserId == idCustomer).ToList();
@@ -65,13 +65,19 @@ namespace Api.Client.MarquetStore.Service.Imp
             List<Sale> salesOfCustomer = await _saleRepository.GetSalesOfCustomer(idCustomer);
             int quantitySales = salesOfCustomer.Count();
 
-            if (coupons != null && salesOfCustomer != null)
+            if (coupons != null && salesOfCustomer != null);
             {
                 bool haveSalesSufficient = coupons.Any(x => x.Quantity == quantitySales);
 
                 if (haveSalesSufficient)
                 {
                     Coupon coupon = coupons.Where(z => z.Quantity == quantitySales).FirstOrDefault();
+
+                    if (exchangesOfCustomer.Any(x => x.CouponId == coupon.Id))
+                    {
+                        return null;
+                    }
+
                     Exchange exchange = new Exchange
                     {
                         UserId = idCustomer,
@@ -82,11 +88,19 @@ namespace Api.Client.MarquetStore.Service.Imp
                     };
                     int idExchange = await _exchangeRepository.Register(exchange);
 
-                    return idExchange;
+                    CouponReceived couponReceived = new CouponReceived
+                    {
+                        Code = coupon.Code,
+                        Description = coupon.Description,
+                        Discount = coupon.Discount,
+                        ExpiredDate = exchange.ExpiredDate,
+                    };
+
+                    return couponReceived;
                 }
             }
 
-            return 0;
+            return null;
         }
     }
 }
