@@ -40,7 +40,7 @@ namespace Api.Client.MarquetStore.Controllers
                 {
                     response.Success = false;
                     response.Message = "User not";
-                    return BadRequest();
+                    return BadRequest(response.Message);
                 }
                 int IdUser = await _userService.RegisterCustomer(userNew);
                 if (IdUser > 0)
