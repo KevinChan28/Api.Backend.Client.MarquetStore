@@ -12,5 +12,8 @@ namespace Api.Client.MarquetStore.Service
         Task<bool> ValidateEmail(string email);
         Task<User> GetUserById(int idUser);
         Task<int> UpdateCustomer(UserUpdate model);
+        Task<int> ChangePassword(ChangePassword model);
+        Task SendCodeToRecoverPassword(string email);
+        Task<bool> ValidateCodeToRecoverPassword(string code);
     }
 }

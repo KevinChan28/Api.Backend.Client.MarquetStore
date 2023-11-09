@@ -1,16 +1,10 @@
-﻿using Api.Client.MarquetStore.Context;
-using Api.Client.MarquetStore.DTO;
+﻿using Api.Client.MarquetStore.DTO;
 using Api.Client.MarquetStore.Models;
 using Api.Client.MarquetStore.Models.Others;
 using Api.Client.MarquetStore.Security;
 using Api.Client.MarquetStore.Service;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Org.BouncyCastle.Bcpg;
 using System.Net;
 
 namespace Api.Client.MarquetStore.Controllers
@@ -161,7 +155,7 @@ namespace Api.Client.MarquetStore.Controllers
             {
                 ArgumentNullException.ThrowIfNull(email);
                     bool existEmail = await _userService.ValidateEmail(email);
-                    answer.Success = true;
+                    answer.Success = existEmail;
                     answer.Data = new {EmailExist = existEmail};
             }
             catch (Exception ex)
@@ -169,6 +163,64 @@ namespace Api.Client.MarquetStore.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
             return Ok(answer);
+        }
+
+        /// <summary>
+        /// Recuperar contraseña
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>booleano</returns>
+        [HttpPatch("recovering/password")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
+        public async Task<IActionResult> RecoverPassword([FromBody] ChangePassword model)
+        {
+            ResponseBase answer = new ResponseBase();
+            try
+            {
+                int idUser = await _userService.ChangePassword(model);
+
+                if (idUser < 1)
+                {
+                    return BadRequest();
+                }
+
+                answer.Success = idUser > 0 ? true : false;
+                answer.Data = idUser;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+            return Ok(answer);
+        }
+
+        /// <summary>
+        /// Validar codigo para cambiar contraseña
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>booleano</returns>
+        [HttpGet("validate/code/{code}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
+        public async Task<IActionResult> ValidateCode([FromRoute] string code)
+        {
+            ResponseBase answer = new ResponseBase();
+            bool validate;
+            try
+            {
+                validate = await _userService.ValidateCodeToRecoverPassword(code);
+                answer.Success = validate;  
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+            return validate == true ? Ok(answer) : BadRequest(answer.Message = "Code incorrect");
         }
     }
 }

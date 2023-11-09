@@ -3,6 +3,7 @@ using Api.Client.MarquetStore.Models;
 using Api.Client.MarquetStore.Repository;
 using Api.Client.MarquetStore.Security;
 using Api.Client.MarquetStore.Tools;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Api.Client.MarquetStore.Service.Imp
 {
@@ -10,11 +11,15 @@ namespace Api.Client.MarquetStore.Service.Imp
     {
         IUserRepository _userRepository;
         JwtSettings _jwtSettings;
+        ISend _sendEmail;
+        private readonly IMemoryCache _memoryCache;
 
-        public ImpUserService(IUserRepository userRepository, JwtSettings jwtSettings)
+        public ImpUserService(IUserRepository userRepository, JwtSettings jwtSettings, ISend sendEmail, IMemoryCache memoryCache)
         {
             _userRepository = userRepository;
             _jwtSettings = jwtSettings;
+            _sendEmail = sendEmail;
+            _memoryCache = memoryCache;
         }
 
         public async Task<User> GetUserById(int idUser)
@@ -25,6 +30,21 @@ namespace Api.Client.MarquetStore.Service.Imp
         public async Task<List<User>> GetUsers()
         {
             return await _userRepository.GetUsers();
+        }
+
+        public async Task<int> ChangePassword(ChangePassword model)
+        {
+            User user = await _userRepository.GetUserByEmail(model.Email);
+
+            if (user != null)
+            {
+                user.Password = Encrypt.GetSHA256(model.Password);
+                int idUser = await _userRepository.Update(user);
+
+                return idUser;
+            }
+
+            return 0;
         }
 
         public async Task<int> RegisterCustomer(UserRegister model)
@@ -39,6 +59,19 @@ namespace Api.Client.MarquetStore.Service.Imp
                 Telephone = model.Telephone,
             };
             int userId = await _userRepository.Add(user);
+
+            if (userId > 0)
+            {
+                string htmlContent = File.ReadAllText("Views/view-bienvenida.html");
+                EmailDTO emailDTO = new EmailDTO
+                {
+                    Affair = "Bienvenido a Marquetstore",
+                    For = model.Email,
+                    Content = htmlContent
+                };
+
+                await _sendEmail.SendEmail(emailDTO);
+            }
 
             return userId;
         }
@@ -91,7 +124,48 @@ namespace Api.Client.MarquetStore.Service.Imp
 
         public async Task<bool> ValidateEmail(string email)
         {
-            return await _userRepository.ValidateEmail(email);
+            bool exist = await _userRepository.ValidateEmail(email);
+
+            if (exist)
+            {
+                await SendCodeToRecoverPassword(email);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task SendCodeToRecoverPassword(string email)
+        {
+            string code = CreateCode.GenerateUniqueCode();
+            DateTimeOffset expiration = DateTimeOffset.Now.AddMinutes(10);
+
+            _memoryCache.Set("code", code, expiration);
+
+            string html = File.ReadAllText("Views/view-recoverPassword.html");
+            html = html.Replace("{{code}}", code);
+
+            EmailDTO emailDTO = new EmailDTO
+            {
+                    Affair = "Tu codigo para restablecer tu contraseña",
+                    For = email,
+                    Content = html
+            };
+
+            await _sendEmail.SendEmail(emailDTO);
+        }
+
+        public async Task<bool> ValidateCodeToRecoverPassword(string code)
+        {
+            if (_memoryCache.TryGetValue("code", out string storedCode) && code == storedCode)
+            {
+                _memoryCache.Remove("code");
+
+                return true;
+            }
+
+            return false;
         }
     }
 }
