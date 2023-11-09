@@ -13,13 +13,15 @@ namespace Api.Client.MarquetStore.Service.Imp
         JwtSettings _jwtSettings;
         ISend _sendEmail;
         private readonly IMemoryCache _memoryCache;
+        IDatabaseRepository _databaseRepository;
 
-        public ImpUserService(IUserRepository userRepository, JwtSettings jwtSettings, ISend sendEmail, IMemoryCache memoryCache)
+        public ImpUserService(IUserRepository userRepository, JwtSettings jwtSettings, ISend sendEmail, IMemoryCache memoryCache, IDatabaseRepository databaseRepository)
         {
             _userRepository = userRepository;
             _jwtSettings = jwtSettings;
             _sendEmail = sendEmail;
             _memoryCache = memoryCache;
+            _databaseRepository = databaseRepository;
         }
 
         public async Task<User> GetUserById(int idUser)
@@ -49,31 +51,52 @@ namespace Api.Client.MarquetStore.Service.Imp
 
         public async Task<int> RegisterCustomer(UserRegister model)
         {
-            User user = new User
+            using(var transaction = await _databaseRepository.BeginTransaction())
             {
-                Name = model.Name,
-                LastName = model.LastName,
-                Email = model.Email,
-                Password = Encrypt.GetSHA256(model.Password),
-                RolId = 2,
-                Telephone = model.Telephone,
-            };
-            int userId = await _userRepository.Add(user);
-
-            if (userId > 0)
-            {
-                string htmlContent = File.ReadAllText("Views/view-bienvenida.html");
-                EmailDTO emailDTO = new EmailDTO
+                try
                 {
-                    Affair = "Bienvenido a Marquetstore",
-                    For = model.Email,
-                    Content = htmlContent
-                };
+                    User user = new User
+                    {
+                        Name = model.Name,
+                        LastName = model.LastName,
+                        Email = model.Email,
+                        Password = Encrypt.GetSHA256(model.Password),
+                        RolId = 2,
+                        Telephone = model.Telephone,
+                    };
+                    int userId = await _userRepository.Add(user);
 
-                await _sendEmail.SendEmail(emailDTO);
+                    if (userId > 0)
+                    {
+                        string htmlContent = File.ReadAllText("Views/view-bienvenida.html");
+                        EmailDTO emailDTO = new EmailDTO
+                        {
+                            Affair = "Bienvenido a Marquetstore",
+                            For = model.Email,
+                            Content = htmlContent
+                        };
+
+                        bool success = await _sendEmail.SendEmail(emailDTO);
+
+                        if (success)
+                        {
+                            transaction.Commit();
+                            return userId;
+                        }
+                        else
+                        {
+                            transaction.Rollback();
+                            return 0;
+                        }
+                    }
+                }
+                catch(Exception) 
+                {
+                    transaction.Rollback();
+                }
+
+                return 0;
             }
-
-            return userId;
         }
 
         public async Task<int> UpdateCustomer(UserUpdate model)

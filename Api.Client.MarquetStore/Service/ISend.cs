@@ -4,6 +4,6 @@ namespace Api.Client.MarquetStore.Service
 {
     public interface ISend
     {
-        Task SendEmail(EmailDTO model);
+        Task<bool> SendEmail(EmailDTO model);
     }
 }

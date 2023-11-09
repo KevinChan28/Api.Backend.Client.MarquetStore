@@ -15,30 +15,41 @@ namespace Api.Client.MarquetStore.Service.Imp
         }
 
 
-        public async Task SendEmail(EmailDTO model)
+        public async Task<bool> SendEmail(EmailDTO model)
         {
             MimeMessage email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(_configuration.GetSection("Email:UserName").Value));
-            email.To.Add(MailboxAddress.Parse(model.For));
-            email.Subject = model.Affair;
-            email.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            try
             {
-                Text = model.Content
-            };
+                
+                email.From.Add(MailboxAddress.Parse(_configuration.GetSection("Email:UserName").Value));
+                email.To.Add(MailboxAddress.Parse(model.For));
+                email.Subject = model.Affair;
+                email.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+                {
+                    Text = model.Content
+                };
 
-            using (SmtpClient smtp = new SmtpClient())
+                using (SmtpClient smtp = new SmtpClient())
+                {
+                    await smtp.ConnectAsync(
+                         _configuration.GetSection("Email:Host").Value,
+                         Convert.ToInt32(_configuration.GetSection("Email:Port").Value),
+                         SecureSocketOptions.StartTls
+                         );
+
+                    await smtp.AuthenticateAsync(_configuration.GetSection("Email:UserName").Value,
+                            _configuration.GetSection("Email:Password").Value);
+
+                    await smtp.SendAsync(email);
+                    await smtp.DisconnectAsync(true);
+                }
+
+                return true;
+            }
+            catch (Exception)
             {
-               await smtp.ConnectAsync(
-                    _configuration.GetSection("Email:Host").Value,
-                    Convert.ToInt32(_configuration.GetSection("Email:Port").Value),
-                    SecureSocketOptions.StartTls
-                    );
 
-                await smtp.AuthenticateAsync(_configuration.GetSection("Email:UserName").Value,
-                        _configuration.GetSection("Email:Password").Value);
-
-               await smtp.SendAsync(email);
-               await smtp.DisconnectAsync(true);
+                return false;
             }
         }
     }
