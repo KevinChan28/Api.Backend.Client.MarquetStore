@@ -91,6 +91,8 @@ namespace Api.Client.MarquetStore
             builder.Services.AddTransient<IExchangeRepository, ImpExchangeRepository>();
             builder.Services.AddTransient<IExchangeService, ImpExchangeService>();
             builder.Services.AddTransient<ICouponRepository, ImpCouponRepository>();
+            builder.Services.AddScoped<ISend,ImpEmailService>();
+            builder.Services.AddMemoryCache();
 
             //CORS
             builder.Services.AddCors(options =>
