@@ -7,6 +7,6 @@ namespace Api.Client.MarquetStore.Service
     {
         Task<CouponReceived> GiveCouponToCustomer(int idCustomer);
         Task<List<CouponsOfCustomer>> GetAllExchangesOfCustomer(int idCustomer);
-        Task<bool> CouponUsed(int idCoupon, int idCustomer);
+        Task<bool> CouponUsed(int idCustomer, int idCoupon );
     }
 }

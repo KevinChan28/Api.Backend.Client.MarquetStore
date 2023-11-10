@@ -17,7 +17,7 @@ namespace Api.Client.MarquetStore.Service.Imp
             _saleRepository = saleRepository;
         }
 
-        public async Task<bool> CouponUsed(int idCoupon, int idCustomer)
+        public async Task<bool> CouponUsed(int idCustomer, int idCoupon)
         {
             Coupon coupon = await _couponRepository.GetCouponById(idCoupon);
 
