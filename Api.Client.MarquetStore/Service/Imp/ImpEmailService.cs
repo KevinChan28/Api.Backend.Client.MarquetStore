@@ -10,7 +10,7 @@ namespace Api.Client.MarquetStore.Service.Imp
         private readonly IConfiguration _configuration;
         private readonly ILogger<ImpEmailService> _logger;
 
-        public ImpEmailService(IConfiguration configuration, ILogger<ImpUserService> logger)
+        public ImpEmailService(IConfiguration configuration, ILogger<ImpEmailService> logger)
         {
             _configuration = configuration;
             _logger = logger;
