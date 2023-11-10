@@ -8,10 +8,12 @@ namespace Api.Client.MarquetStore.Service.Imp
     public class ImpEmailService : ISend
     {
         private readonly IConfiguration _configuration;
+        private readonly ILogger<ImpEmailService> _logger;
 
-        public ImpEmailService(IConfiguration configuration)
+        public ImpEmailService(IConfiguration configuration, ILogger<ImpUserService> logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
 
 
@@ -46,9 +48,9 @@ namespace Api.Client.MarquetStore.Service.Imp
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                _logger.LogError(ex, "Error al enviar el correo.");
                 return false;
             }
         }

@@ -3,6 +3,7 @@ using Api.Client.MarquetStore.Models;
 using Api.Client.MarquetStore.Models.Others;
 using Api.Client.MarquetStore.Security;
 using Api.Client.MarquetStore.Service;
+using Api.Client.MarquetStore.Service.Imp;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -15,10 +16,12 @@ namespace Api.Client.MarquetStore.Controllers
     public class UsersController : ControllerBase
     {
        private readonly IUserService _userService;
+        private readonly ILogger<UsersController> _logger;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, ILogger<UsersController> logger)
         {
             _userService = userService;
+            _logger = logger;
         }
 
 
@@ -56,6 +59,7 @@ namespace Api.Client.MarquetStore.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error en el controlador RegisterCustomer");
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     response.Message = ex.Message); ;
             }

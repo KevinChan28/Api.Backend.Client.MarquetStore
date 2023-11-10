@@ -14,14 +14,17 @@ namespace Api.Client.MarquetStore.Service.Imp
         ISend _sendEmail;
         private readonly IMemoryCache _memoryCache;
         IDatabaseRepository _databaseRepository;
+        private readonly ILogger<ImpUserService> _logger;
 
-        public ImpUserService(IUserRepository userRepository, JwtSettings jwtSettings, ISend sendEmail, IMemoryCache memoryCache, IDatabaseRepository databaseRepository)
+        public ImpUserService(IUserRepository userRepository, JwtSettings jwtSettings, ISend sendEmail
+            , IMemoryCache memoryCache, IDatabaseRepository databaseRepository, ILogger<ImpUserService> logger)
         {
             _userRepository = userRepository;
             _jwtSettings = jwtSettings;
             _sendEmail = sendEmail;
             _memoryCache = memoryCache;
             _databaseRepository = databaseRepository;
+            _logger = logger;
         }
 
         public async Task<User> GetUserById(int idUser)
@@ -90,8 +93,9 @@ namespace Api.Client.MarquetStore.Service.Imp
                         }
                     }
                 }
-                catch(Exception) 
+                catch(Exception ex) 
                 {
+                    _logger.LogError(ex, "Error al enviar el correo.");
                     transaction.Rollback();
                 }
 
