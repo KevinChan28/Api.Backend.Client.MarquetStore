@@ -15,9 +15,10 @@ namespace Api.Client.MarquetStore.Service.Imp
         private readonly IMemoryCache _memoryCache;
         IDatabaseRepository _databaseRepository;
         private readonly ILogger<ImpUserService> _logger;
+        IConfiguration _configuration;
 
         public ImpUserService(IUserRepository userRepository, JwtSettings jwtSettings, ISend sendEmail
-            , IMemoryCache memoryCache, IDatabaseRepository databaseRepository, ILogger<ImpUserService> logger)
+            , IMemoryCache memoryCache, IDatabaseRepository databaseRepository, ILogger<ImpUserService> logger, IConfiguration configuration)
         {
             _userRepository = userRepository;
             _jwtSettings = jwtSettings;
@@ -25,6 +26,7 @@ namespace Api.Client.MarquetStore.Service.Imp
             _memoryCache = memoryCache;
             _databaseRepository = databaseRepository;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public async Task<User> GetUserById(int idUser)
@@ -71,7 +73,7 @@ namespace Api.Client.MarquetStore.Service.Imp
 
                     if (userId > 0)
                     {
-                        string htmlContent = File.ReadAllText("Views/view-bienvenida.html");
+                        string htmlContent = File.ReadAllText(Path.Combine(_configuration.GetSection("Email:Path").Value, "view-bienvenida.html")); ;
                         EmailDTO emailDTO = new EmailDTO
                         {
                             Affair = "Bienvenido a Marquetstore",
