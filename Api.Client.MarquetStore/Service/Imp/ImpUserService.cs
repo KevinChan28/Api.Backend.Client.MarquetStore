@@ -73,7 +73,17 @@ namespace Api.Client.MarquetStore.Service.Imp
 
                     if (userId > 0)
                     {
-                        string htmlContent = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, _configuration.GetSection("Email:Path").Value, "view-bienvenida.html"));
+                        // Obtén la ruta desde la configuración o usa una predeterminada
+                        string emailPath = _configuration.GetSection("Email:Path").Value ?? "Views/";
+
+                        // Combina la ruta con el nombre del archivo
+                        string filePath = Path.Combine(AppContext.BaseDirectory, emailPath, "view-bienvenida.html");
+
+                        // Imprime la ruta para fines de depuración
+                        _logger.LogInformation($"Trying to read file at: {filePath}");
+
+                        // Lee el contenido del archivo
+                        string htmlContent = File.ReadAllText(filePath);
                         EmailDTO emailDTO = new EmailDTO
                         {
                             Affair = "Bienvenido a Marquetstore",
