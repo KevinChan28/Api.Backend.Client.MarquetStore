@@ -73,7 +73,7 @@ namespace Api.Client.MarquetStore.Service.Imp
 
                     if (userId > 0)
                     {
-                        string htmlContent = File.ReadAllText(Path.Combine(_configuration.GetSection("Email:Path").Value, "view-bienvenida.html")); ;
+                        string htmlContent = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, _configuration.GetSection("Email:Path").Value, "view-bienvenida.html"));
                         EmailDTO emailDTO = new EmailDTO
                         {
                             Affair = "Bienvenido a Marquetstore",
