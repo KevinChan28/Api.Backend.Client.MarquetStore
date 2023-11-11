@@ -1,6 +1,8 @@
 ﻿using Api.Client.MarquetStore.DTO;
 using Api.Client.MarquetStore.Models.Others;
 using Api.Client.MarquetStore.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -9,6 +11,7 @@ namespace Api.Client.MarquetStore.Controllers
 {
     [EnableCors("Cors")]
     [Route("[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.CUSTOMER)]
     [ApiController]
     public class ProductsController : ControllerBase
     {

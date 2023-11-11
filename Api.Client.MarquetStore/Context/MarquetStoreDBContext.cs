@@ -40,6 +40,8 @@ public partial class MarquetstoreDbContext : DbContext
 
     public virtual DbSet<Exchange> Exchanges { get; set; }
 
+    public virtual DbSet<View> Views { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -216,6 +218,17 @@ public partial class MarquetstoreDbContext : DbContext
             entity.Property(e => e.UserId).HasColumnType("int(11)");
             entity.Property(e => e.CouponId).HasColumnType("int(11)");
             entity.Property(e => e.Count).HasColumnType("int(11)");
+        });
+
+        modelBuilder.Entity<View>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("View");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.Name).HasColumnType("longtext");
+            entity.Property(e => e.Content).HasColumnType("longtext");
         });
 
         OnModelCreatingPartial(modelBuilder);

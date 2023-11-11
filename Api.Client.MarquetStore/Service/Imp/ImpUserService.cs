@@ -15,10 +15,10 @@ namespace Api.Client.MarquetStore.Service.Imp
         private readonly IMemoryCache _memoryCache;
         IDatabaseRepository _databaseRepository;
         private readonly ILogger<ImpUserService> _logger;
-        IConfiguration _configuration;
+        IViewRepository _viewRepository;
 
         public ImpUserService(IUserRepository userRepository, JwtSettings jwtSettings, ISend sendEmail
-            , IMemoryCache memoryCache, IDatabaseRepository databaseRepository, ILogger<ImpUserService> logger, IConfiguration configuration)
+            , IMemoryCache memoryCache, IDatabaseRepository databaseRepository, ILogger<ImpUserService> logger, IViewRepository viewRepository)
         {
             _userRepository = userRepository;
             _jwtSettings = jwtSettings;
@@ -26,7 +26,7 @@ namespace Api.Client.MarquetStore.Service.Imp
             _memoryCache = memoryCache;
             _databaseRepository = databaseRepository;
             _logger = logger;
-            _configuration = configuration;
+            _viewRepository = viewRepository;
         }
 
         public async Task<User> GetUserById(int idUser)
@@ -73,20 +73,10 @@ namespace Api.Client.MarquetStore.Service.Imp
 
                     if (userId > 0)
                     {
-                        // Obtén la ruta desde la configuración o usa una predeterminada
-                        string emailPath = _configuration.GetSection("Email:Path").Value ?? "Views/";
-
-                        // Combina la ruta con el nombre del archivo
-                        string filePath = Path.Combine(AppContext.BaseDirectory, emailPath, "view-bienvenida.html");
-
-                        // Imprime la ruta para fines de depuración
-                        _logger.LogInformation($"Trying to read file at: {filePath}");
-
-                        // Lee el contenido del archivo
-                        string htmlContent = File.ReadAllText(filePath);
+                        string htmlContent = await _viewRepository.GetHtmlWelcome();
                         EmailDTO emailDTO = new EmailDTO
                         {
-                            Affair = "Bienvenido a Marquetstore",
+                            Affair = "¡Bienvenido a Marquetstore!",
                             For = model.Email,
                             Content = htmlContent
                         };
