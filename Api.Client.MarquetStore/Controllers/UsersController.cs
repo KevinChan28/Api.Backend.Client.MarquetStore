@@ -100,6 +100,7 @@ namespace Api.Client.MarquetStore.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error en el controlador Products");
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     response.Message = ex.Message); ;
             }

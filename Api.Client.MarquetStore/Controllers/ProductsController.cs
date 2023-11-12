@@ -11,15 +11,16 @@ namespace Api.Client.MarquetStore.Controllers
 {
     [EnableCors("Cors")]
     [Route("[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.CUSTOMER)]
     [ApiController]
     public class ProductsController : ControllerBase
     {
         private readonly IProductsService _productsService;
+        private ILogger<ProductsController> _logger;
 
-        public ProductsController(IProductsService productsService)
+        public ProductsController(IProductsService productsService, ILogger<ProductsController> logger)
         {
             _productsService = productsService;
+            _logger = logger;
         }
 
 
@@ -74,6 +75,8 @@ namespace Api.Client.MarquetStore.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.CUSTOMER)]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllProducts()
         {
             ResponseBase answer = new ResponseBase();
