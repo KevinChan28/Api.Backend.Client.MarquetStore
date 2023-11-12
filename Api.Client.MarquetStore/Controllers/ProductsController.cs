@@ -76,7 +76,6 @@ namespace Api.Client.MarquetStore.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.CUSTOMER)]
-        [AllowAnonymous]
         public async Task<IActionResult> GetAllProducts()
         {
             ResponseBase answer = new ResponseBase();
