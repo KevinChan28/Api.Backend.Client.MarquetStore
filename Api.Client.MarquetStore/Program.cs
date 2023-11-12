@@ -115,11 +115,11 @@ namespace Api.Client.MarquetStore
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("Cors");
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
-            app.UseCors("Cors");
 
             app.UseAuthentication();
 
