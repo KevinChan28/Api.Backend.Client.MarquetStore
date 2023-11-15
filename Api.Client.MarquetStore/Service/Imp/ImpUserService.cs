@@ -172,8 +172,7 @@ namespace Api.Client.MarquetStore.Service.Imp
 
             _memoryCache.Set("code", code, expiration);
 
-            string html = File.ReadAllText("Views/view-recoverPassword.html");
-            html = html.Replace("{{code}}", code);
+            string html = await _viewRepository.GetHtmñRecoverPassword();
 
             EmailDTO emailDTO = new EmailDTO
             {
