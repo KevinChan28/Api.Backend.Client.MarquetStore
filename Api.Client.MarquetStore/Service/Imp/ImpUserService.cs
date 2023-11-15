@@ -173,12 +173,13 @@ namespace Api.Client.MarquetStore.Service.Imp
             _memoryCache.Set("code", code, expiration);
 
             string html = await _viewRepository.GetHtmñRecoverPassword();
+            string htmlAddCode = html.Replace("{{code}}", $"{code}");
 
             EmailDTO emailDTO = new EmailDTO
             {
                     Affair = "Tu codigo para restablecer tu contraseña",
                     For = email,
-                    Content = html
+                    Content = htmlAddCode
             };
 
             await _sendEmail.SendEmail(emailDTO);
