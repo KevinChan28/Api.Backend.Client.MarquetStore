@@ -139,7 +139,7 @@ namespace Api.Client.MarquetStore.Service.Imp
                 User userValidate = await _userRepository.GetUserByCredentials(user);
                 UserTokens informationUser = new UserTokens
                 {
-                    UserName = userValidate.Email,
+                    UserName = userValidate.Name,
                     Id = userValidate.Id,
                     Rol = userValidate.RolId,
                     GuidId = Guid.NewGuid(),
