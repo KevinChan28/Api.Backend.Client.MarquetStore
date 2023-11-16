@@ -4,6 +4,8 @@ using Api.Client.MarquetStore.Models.Others;
 using Api.Client.MarquetStore.Security;
 using Api.Client.MarquetStore.Service;
 using Api.Client.MarquetStore.Service.Imp;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -34,6 +36,7 @@ namespace Api.Client.MarquetStore.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.CUSTOMER)]
         public async Task<IActionResult> RegisterCustomer([FromBody] UserRegister userNew)
         {
             ResponseBase response = new ResponseBase();
@@ -68,6 +71,8 @@ namespace Api.Client.MarquetStore.Controllers
         [HttpPost("Login")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+
+
         public async Task<IActionResult> Login([FromBody] Login login)
         {
             ResponseBase response = new ResponseBase();
@@ -109,7 +114,7 @@ namespace Api.Client.MarquetStore.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
         public async Task<IActionResult> GetAllUsers()
         {
             ResponseBase answer = new ResponseBase();
@@ -144,7 +149,6 @@ namespace Api.Client.MarquetStore.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
         public async Task<IActionResult> ValidateEmail([FromRoute] string email)
         {
             ResponseBase answer = new ResponseBase();
@@ -171,7 +175,6 @@ namespace Api.Client.MarquetStore.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
         public async Task<IActionResult> RecoverPassword([FromBody] ChangePassword model)
         {
             ResponseBase answer = new ResponseBase();
@@ -203,7 +206,6 @@ namespace Api.Client.MarquetStore.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
         public async Task<IActionResult> ValidateCode([FromRoute] string code)
         {
             ResponseBase answer = new ResponseBase();
