@@ -39,12 +39,6 @@ namespace Api.Client.MarquetStore.Controllers
             ResponseBase response = new ResponseBase();
             try
             {
-                if (userNew == null)
-                {
-                    response.Success = false;
-                    response.Message = "User not";
-                    return BadRequest(response.Message);
-                }
                 int IdUser = await _userService.RegisterCustomer(userNew);
                 if (IdUser > 0)
                 {
@@ -60,8 +54,7 @@ namespace Api.Client.MarquetStore.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error en el controlador RegisterCustomer");
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    response.Message = ex.Message); ;
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
             return Ok(response);
         }
@@ -132,7 +125,6 @@ namespace Api.Client.MarquetStore.Controllers
                 }
                 else
                 {
-                    answer.Success = false;
                     return NoContent();
                 }
             }
