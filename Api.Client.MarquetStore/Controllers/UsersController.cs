@@ -70,8 +70,6 @@ namespace Api.Client.MarquetStore.Controllers
         [HttpPost("Login")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-
-
         public async Task<IActionResult> Login([FromBody] Login login)
         {
             ResponseBase response = new ResponseBase();
