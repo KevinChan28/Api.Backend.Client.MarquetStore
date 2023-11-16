@@ -76,7 +76,7 @@ namespace Api.Client.MarquetStore.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.CUSTOMER)]
         public async Task<IActionResult> UpdateAddress([FromBody] AddressCustomer addressCustomer)
         {
             ResponseBase answer = new ResponseBase();
@@ -114,6 +114,7 @@ namespace Api.Client.MarquetStore.Controllers
         [HttpDelete("{idAddress}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.CUSTOMER)]
         public async Task<IActionResult> DeleteAddress([FromRoute] int idAddress)
         {
             ResponseBase response = new ResponseBase();
@@ -140,7 +141,7 @@ namespace Api.Client.MarquetStore.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.CUSTOMER)]
         public async Task<IActionResult> GetAddressOfCustomer([FromRoute]int idCustomer)
         {
             ResponseBase answer = new ResponseBase();

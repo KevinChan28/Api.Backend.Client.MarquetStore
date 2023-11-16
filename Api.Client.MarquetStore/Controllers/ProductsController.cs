@@ -33,6 +33,7 @@ namespace Api.Client.MarquetStore.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
         public async Task<IActionResult> RegisterProduct([FromBody] ProductRegister productNew)
         {
             ResponseBase response = new ResponseBase();

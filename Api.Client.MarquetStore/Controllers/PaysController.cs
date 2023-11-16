@@ -76,7 +76,7 @@ namespace Api.Client.MarquetStore.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
+       
         public async Task<IActionResult> GetAllPays()
         {
             ResponseBase answer = new ResponseBase();

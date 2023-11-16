@@ -32,7 +32,7 @@ namespace Api.Client.MarquetStore.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.CUSTOMER)]
         public async Task<IActionResult> GetAllPaymentsMethod()
         {
             ResponseBase answer = new ResponseBase();
@@ -68,6 +68,7 @@ namespace Api.Client.MarquetStore.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.ADMINISTRATOR)]
         public async Task<IActionResult> RegisterPaymentMethod([FromBody] PaymentsMethod paymentMethodNew)
         {
             ResponseBase response = new ResponseBase();
