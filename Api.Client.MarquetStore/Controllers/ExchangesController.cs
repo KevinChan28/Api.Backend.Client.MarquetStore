@@ -5,6 +5,8 @@ using Api.Client.MarquetStore.Service;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Client.MarquetStore.Controllers
 {
@@ -29,6 +31,7 @@ namespace Api.Client.MarquetStore.Controllers
         [HttpPost("{idCustomer}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = DataRoles.CUSTOMER)]
         public async Task<IActionResult> RegisterExchange([FromRoute] int idCustomer)
         {
             ResponseBase response = new ResponseBase();
