@@ -13,10 +13,11 @@ namespace Api.Client.MarquetStore.Service.Imp
         IPersonalizationRepository _personalizationRepository;
         IDatabaseRepository _databaseRepository;
         IIngredientsRepository _ingredientsRepository;
+        IUserRepository _userRepository;
 
         public ImpSaleService(ISaleRepository saleServiceRepository, IConceptRepository conceptRepository,
             IProductsRepository productsRepository, IPersonalizationRepository personalizationRepository, IDatabaseRepository databaseRepository,
-            IIngredientsRepository ingredientsRepository)
+            IIngredientsRepository ingredientsRepository, IUserRepository userRepository)
         {
             _saleRepository = saleServiceRepository;
             _conceptRepository = conceptRepository;
@@ -24,6 +25,7 @@ namespace Api.Client.MarquetStore.Service.Imp
             _personalizationRepository = personalizationRepository;
             _databaseRepository = databaseRepository;
             _ingredientsRepository = ingredientsRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<List<SalesOfCustomer>> GetSalesOfCustomer(int idCustomer)
@@ -32,12 +34,14 @@ namespace Api.Client.MarquetStore.Service.Imp
             List<Concept> concepts = await _conceptRepository.GetAllConcepts();
             List<Personalization> personalizations = await _personalizationRepository.GetAllPersonalizations();
             List<Product> products = await _productsRepository.GetProducts();
+            List<User> users = await _userRepository.GetUsers();
             List<SalesOfCustomer> salesOfCustomers = sales.Select(a => new SalesOfCustomer
             {
                 IdSale = a.Id,
                 CreatedDate = a.CreatedDate,
                 Total = a.Total,
                 Status = a.Status,
+                NameUser = users.Where(w => w.Id == a.UserId).Select(i => i.Name).FirstOrDefault(),
                 Concepts = concepts.Select(x => new ConceptsOfCustomer
                 {
                     ConceptId = x.Id,
